@@ -11,9 +11,11 @@ int main( int argc, char* argv[] )
 	extern char *optarg;
 	int rtn;
 	
-	while( (rtn = getopt(argc, argv, "abcd:")) != -1 )
+// le string "abc:d:" représente les paramètre qu'on veut reconnaitre
+// un ":" signifie que le paramêtre prend une valeur
+	while( (rtn = getopt(argc, argv, "abc:d:")) != -1 )
 	{
-		printf( "%c : %s\n", rtn, optarg+1);
+		printf( "%c : %s\n", rtn, optarg);
 	}
 	return 0;
 }
