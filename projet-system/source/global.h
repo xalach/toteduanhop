@@ -1,6 +1,7 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+
 struct tar_header
 {
 	double size;
@@ -8,5 +9,7 @@ struct tar_header
 };
 
 char* tar_path;
+const char * tar_ext = "tar";
+int verbose;
 
 #endif
