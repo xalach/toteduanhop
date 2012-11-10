@@ -5,14 +5,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../main.c \
+../out.c \
 ../record.c 
 
 OBJS += \
 ./main.o \
+./out.o \
 ./record.o 
 
 C_DEPS += \
 ./main.d \
+./out.d \
 ./record.d 
 
 

@@ -2,8 +2,10 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <stdlib.h>
+
 #include "record.h"
 #include "global.h"
+#include "out.h"
 
 int main( int argc, char* argv[] )
 {	
@@ -62,6 +64,7 @@ int main( int argc, char* argv[] )
 			break;
 		}
 
+		write_verbose("ceci est un test");
 
 	}
 	return 0;

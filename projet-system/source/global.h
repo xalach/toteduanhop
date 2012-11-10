@@ -1,5 +1,5 @@
-#ifndef GLOBAL_H
-#define GLOBAL_H
+#ifndef GLOBAL_H_
+#define GLOBAL_H_
 
 
 struct tar_header
@@ -9,7 +9,6 @@ struct tar_header
 };
 
 char* tar_path;
-const char * tar_ext = "tar";
 int verbose;
 
-#endif
+#endif /* GLOBAL_H_ */
