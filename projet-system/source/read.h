@@ -3,4 +3,6 @@
 
 int is_compress(char * path);
 
+void get_file_info(char * path);
+
 #endif /* READ_H_ */

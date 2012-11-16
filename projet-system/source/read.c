@@ -6,6 +6,7 @@
 
 #include "read.h"
 #include "out.h"
+#include "global.h"
 
 int is_compress(char * path)
 {
@@ -14,4 +15,9 @@ int is_compress(char * path)
 	read(fd, &bit, 1);
 	printf("le bit lu est : %d\n", bit);
 	return bit;
+}
+
+void get_file_info(char * path)
+{
+	stat(path, &file_info);
 }
