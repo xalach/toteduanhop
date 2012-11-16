@@ -12,7 +12,7 @@ int main( int argc, char* argv[] )
 {	
 	verbose = 0;
 
-	is_compress(argv[1]);
+	//is_compress(argv[1]);
 	extern int optind, optopt;
 	extern char *optarg;
 	int opt;
