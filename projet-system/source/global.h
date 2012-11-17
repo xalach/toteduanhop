@@ -16,4 +16,10 @@ int verbose;
 
 struct stat file_info;
 
+struct file_infoo
+{
+	char* create_time;
+	char* right;
+};
+
 #endif /* GLOBAL_H_ */
