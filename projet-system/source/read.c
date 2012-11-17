@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "read.h"
 #include "out.h"
@@ -21,6 +22,20 @@ int is_compress(char * path)
 
 void get_file_info(char * path)
 {
-	stat(path, &file_info);
-	printf("mode : %d\n", file_info.st_mode);
+	struct stat statfile;
+	stat(path, &statfile);
+	printf("mode : %d\n", statfile.st_mode);
+	printf("date : %s\n", ctime(&statfile.st_mtim));
+	long test = htonl(statfile.st_size);
+	printf("size : %d\n", ntohl(test));
+
+	ushort mode = statfile.st_mode;
+	//char * modestring = atoi(mode);
+	char * accesses[] = {"...", "..x", ".w.", ".wx", "r..", "r.x", "rw.", "rwx"};
+	//printf(" Access mode 0%s: ", modestring);
+	printf(" Access mode 0%o: ", mode);
+	int i;
+	   for(i = 6; i >= 0; i -=3)
+	      printf("%s", accesses[(mode >> i) & 7]);
+	   printf("\n");
 }
