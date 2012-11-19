@@ -1,4 +1,6 @@
-(defpackage :abstract-enumerator (:use :common-lisp))
+(defpackage :abstract-enumerator
+  (:export * )
+  (:use :common-lisp))
 (in-package :abstract-enumerator)
 
 (defclass abstract-enumerator () ())
