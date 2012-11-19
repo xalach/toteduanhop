@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <arpa/inet.h>
 
 #include "read.h"
 #include "out.h"
@@ -24,18 +25,9 @@ void get_file_info(char * path)
 {
 	struct stat statfile;
 	stat(path, &statfile);
-	printf("mode : %d\n", statfile.st_mode);
-	printf("date : %s\n", ctime(&statfile.st_mtim));
-	long test = htonl(statfile.st_size);
-	printf("size : %d\n", ntohl(test));
 
-	ushort mode = statfile.st_mode;
-	//char * modestring = atoi(mode);
-	char * accesses[] = {"...", "..x", ".w.", ".wx", "r..", "r.x", "rw.", "rwx"};
-	//printf(" Access mode 0%s: ", modestring);
-	printf(" Access mode 0%o: ", mode);
-	int i;
-	   for(i = 6; i >= 0; i -=3)
-	      printf("%s", accesses[(mode >> i) & 7]);
-	   printf("\n");
+	//void empiler(struct pile_file * pile, char * p, char * n, time_t * ct, ushort * mode, long * size);
+
+	long size = htonl(statfile.st_size);
+	empiler(list_file, path, "jose", (time_t *)&statfile.st_mtim, (ushort *)&statfile.st_mode, &size);
 }

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "out.h"
 
 /**********************************************************************
  * 	PILE
@@ -22,7 +23,7 @@ struct element_pile * next_element(struct element_pile * element)
 void empiler(struct pile_file * pile, char * p, char * n, time_t * ct, ushort * mode, long * size)
 {
 	struct element_pile * newfile;
-	newfile = (struct element_pile *)malloc(sizeof (struct element_pile));
+	newfile = (struct element_pile *)malloc(sizeof(struct element_pile));
 	newfile->info.path = *p;
 	newfile->info.name = *n;
 	newfile->info.create_time = *ct;
@@ -33,12 +34,20 @@ void empiler(struct pile_file * pile, char * p, char * n, time_t * ct, ushort * 
 	pile->first_file = newfile;
 
 	pile->nb_file++;
+
+	write_verbose("nouveau fichier empiler");
 }
-struct element_pile depiler(struct pile_file * pile)
+
+
+struct element_pile * depiler(struct pile_file * pile)
 {
 	struct element_pile * entete = entete_pile(pile);
 	pile->first_file = next_element(entete);
-	struct element_pile retour = *entete;
 	free(entete);
-	return retour;
+	return entete_pile(pile);
+}
+
+void liberer_pile(struct pile_file * pile)
+{
+	while( depiler(pile) != NULL );
 }
