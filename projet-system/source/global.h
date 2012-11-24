@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-const char * right_values[] = {"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"};
+const char * right_values[8];
 
 struct tar_header
 {
@@ -29,14 +29,16 @@ struct file_info
  * 	PILE
  **********************************************************************/
 
-/* definir la structure de base d'une pile */
+/*
+ // definir la structure de base d'une pile
+
 struct element_pile
 {
 	struct file_info info;
 	struct element_pile * next;
 };
 
-/* la pile de fichier */
+// la pile de fichier
 struct pile_file
 {
 	int nb_file; 							// le nombre d'élément dans la pile
@@ -50,6 +52,7 @@ void empiler(struct pile_file * pile, char * p, char * n, time_t * ct, ushort * 
 struct element_pile * depiler(struct pile_file * pile);
 void liberer_pile(struct pile_file * pile);
 
-struct pile_file * list_file;
+struct pile_file * list_file; */
+
 
 #endif /* GLOBAL_H_ */

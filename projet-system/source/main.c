@@ -11,9 +11,9 @@
 int main( int argc, char* argv[] )
 {	
 	verbose = 1;
-	list_file = (struct pile_file *)malloc(sizeof (struct pile_file));
+	/*list_file = (struct pile_file *)malloc(sizeof (struct pile_file));
 	list_file->nb_file = 0;
-	list_file->first_file = NULL;
+	list_file->first_file = NULL;*/
 
 	get_file_info("/home/arnaud/test.tar");
 	get_file_info("/home/arnaud/test1");
@@ -76,7 +76,5 @@ int main( int argc, char* argv[] )
 		write_verbose("ceci est un test");
 
 	}
-
-	liberer_pile(list_file);
 	return 0;
 }

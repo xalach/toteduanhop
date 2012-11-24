@@ -25,9 +25,6 @@ void get_file_info(char * path)
 {
 	struct stat statfile;
 	stat(path, &statfile);
-
-	//void empiler(struct pile_file * pile, char * p, char * n, time_t * ct, ushort * mode, long * size);
-
-	long size = htonl(statfile.st_size);
-	empiler(list_file, path, "jose", (time_t *)&statfile.st_mtim, (ushort *)&statfile.st_mode, &size);
+	//long size = htonl(statfile.st_size);
+	//empiler(list_file, path, "jose", (time_t *)&statfile.st_mtim, (ushort *)&statfile.st_mode, &size);
 }

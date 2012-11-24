@@ -1,10 +1,12 @@
 #include "global.h"
-#include "out.h"
+//#include "out.h"
+
+const char * right_values[] = {"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"};
 
 /**********************************************************************
  * 	PILE
  **********************************************************************/
-
+/*
 struct element_pile * entete_pile(struct pile_file * pile)
 {
 	return pile->first_file;
@@ -51,3 +53,4 @@ void liberer_pile(struct pile_file * pile)
 {
 	while( depiler(pile) != NULL );
 }
+*/
