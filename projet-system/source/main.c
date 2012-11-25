@@ -10,14 +10,13 @@
 
 int main( int argc, char* argv[] )
 {	
-	verbose = 1;
+	get_files_directory("Test");
+
+
 	/*list_file = (struct pile_file *)malloc(sizeof (struct pile_file));
 	list_file->nb_file = 0;
 	list_file->first_file = NULL;*/
 
-	get_file_info("/home/arnaud/test.tar");
-	get_file_info("/home/arnaud/test1");
-	get_file_info("/home/arnaud/test.tar");
 	extern int optind, optopt;
 	extern char *optarg;
 	int opt;
