@@ -7,6 +7,19 @@
 ;voir comment importer facilement les fonctionnalités
 
 ; fonctionnera t'elle avec liste en cycle ?
+; réponse de Quy: oui, mon cher Arnaud :P
+(defun ncirc (l) (nconc l l))
+(defun circ (l) (ncirc (copy-list l)))
+
+(defun make-list-enumerator
+    (l &optional (circ nil))
+  (when circ
+    (setf l (circ l)))
+  (make-instance
+   'list-enumerator
+    :initial-list l :current-list l))
+    
+    
 
 (defclass list-enumerator (abstract-enumerator)
   ((enum-list :initarg :enum-list :initform '())
@@ -27,7 +40,3 @@
     (prog1
 	(car e)
       (setf e (cdr e)))))
-      
-
-;(defmethod copy-enumerator ((e list-enumerator))
-
