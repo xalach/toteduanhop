@@ -22,19 +22,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: libprojet-system-tar
+all: projet-system-tar
 
 # Tool invocations
-libprojet-system-tar: $(OBJS) $(USER_OBJS)
+projet-system-tar: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -lxml2 -shared -o "libprojet-system-tar" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc  -o "projet-system-tar" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C_DEPS)$(LIBRARIES) libprojet-system-tar
+	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) projet-system-tar
 	-@echo ' '
 
 .PHONY: all clean dependents
