@@ -3,3 +3,5 @@ projet-system/source/Release/
 projet-system/source/.*
 projet-system/projet-tar/
 projet-lisp/source/*~
+projet-lisp/source/\#*
+projet-lisp/source/.*
