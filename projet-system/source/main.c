@@ -10,7 +10,7 @@
 
 int main( int argc, char* argv[] )
 {	
-	get_files_directory("Test"); 	
+	//get_files_directory("Test"); 	
 
 
 	/*list_file = (struct pile_file *)malloc(sizeof (struct pile_file));

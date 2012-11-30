@@ -91,6 +91,8 @@ void read_files(int nb_files, char * files[])
 			//addFolder(char* NewFolderName, xmlNodePtr repertoireCourant)
 			get_files_directory(files[i]/*AddFolder*/); 	// passé en parametre
 		}
+		//~ if( erreur )
+			//~ afficher message
 	}
 }
 
