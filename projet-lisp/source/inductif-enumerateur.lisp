@@ -15,8 +15,7 @@
 
 
 (defmethod init-enumerator ((e inductif-enumerateur))
-  (setf (current-value e)
-	(init-value e))
+  (setf (current-value e) (init-value e))
   e)
 
 ; pourquoi renvoyer toujours vrai ?
