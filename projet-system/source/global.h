@@ -25,6 +25,13 @@ struct file_info
 	long size;				// converti avec htonl
 };
 
+struct dir_info
+{
+	char* name;
+	time_t create_time;		// convertible en Char* via ctime(&create_time);
+	ushort mode;			// convertible en Char* via la fonction mode_view(mode) dans out.h
+};
+
 /**********************************************************************
  * 	PILE
  **********************************************************************/

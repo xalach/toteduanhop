@@ -10,7 +10,7 @@
 
 int main( int argc, char* argv[] )
 {	
-	get_files_directory("Test");
+	get_files_directory("Test"); 	
 
 
 	/*list_file = (struct pile_file *)malloc(sizeof (struct pile_file));
@@ -39,7 +39,7 @@ int main( int argc, char* argv[] )
 					verbose = 1;
 					break;
 				case 'c':
-					//créer une archive tar avec les fichier dans "optarg"
+					//créer une archive tar avec les fichier dans "optarg" 
 					break;
 				case 't':
 					//afficher l'archive

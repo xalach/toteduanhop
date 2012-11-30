@@ -27,7 +27,7 @@ void addFile(char *name, struct file_info infos, xmlNodePtr currentNode, char *d
 
 
 //Ajoute un répertoire au répertoire courant(currentNode) et retourne un pointeur sur le nouveau répertoire.
-xmlNodePtr addFolder(char *folderName, char *parentNode)
+xmlNodePtr addFolder(char *folderName, xmlNodePtr *currentNode)
 {
   //xmlNodePtr currentNode =  
   return(xmlAddChild(currentNode,xmlNewNode(NULL,folderName)));
