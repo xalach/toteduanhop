@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <arpa/inet.h>
+#include <stdlib.h>
 
 #include "out.h"
 
@@ -12,14 +13,17 @@ void write_verbose(char * message)
 
 void afficher_file(struct file_info * file)
 {
+
 	printf("******** %s *********\n", file->name);
 	printf("*********************\n");
-	printf("date creation : %s\n", ctime(&file->create_time));
-	printf("size : %d\n", ntohl(file->size));
+	printf("date creation : %s\n", file->create_time);
+	printf("size : %d\n", ntohl(atoi(file->size)));
 
-	printf(" Access mode 0%o: ", file->mode);
+	//printf(" Access mode 0%s: ", file->mode);
+	/*
 	int i;
 	   for(i = 6; i >= 0; i -=3)
 		  printf("%s", right_values[(file->mode >> i) & 7]);
-	   printf("\n");
+	   printf("\n");*/
 }
+

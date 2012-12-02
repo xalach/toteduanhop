@@ -28,17 +28,19 @@ int is_compress(char * path)
 
 struct file_info * get_file_info(char * path)
 {
-	printf("-   - ficher : %s \n", path);
+
 	struct stat statfile;
 	stat(path, &statfile);
 
 	struct file_info * newfile;
 	newfile = (struct file_info *)malloc(sizeof(struct file_info));
+
 	newfile->path = path;
+
 	newfile->name = basename(path);
-	//newfile->create_time = statfile.st_mtime;  	// se compile mal depuis eclipse
-	newfile->mode = statfile.st_mode;
-	newfile->size = htonl(statfile.st_size);
+	newfile->create_time = ctime(&statfile.st_mtime);  	// se compile mal depuis eclipse
+	//sprintf(newfile->mode, "%d", statfile.st_mode);		// plante niveau mémoire
+	//newfile->size = sprintf(newfile->size,"%s", statfile.st_size);	// plante niveau mémoire
 
 	return newfile;
 }
@@ -46,7 +48,6 @@ struct file_info * get_file_info(char * path)
 void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter : xmlNodePtr ( repetoire courant )
 {
 	printf("ouverture du dossier : %s \n", path);
-	begin_dir(path);
 	struct stat statfile;
 	DIR * d = opendir(path);
 	struct dirent * infodir;
@@ -67,7 +68,6 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 			//addFile(fname,get_file_info(fname),repcourant,""); //get_data(file[i]);
 		}
 	}
-	end_dir(path);
 	closedir(d);
 }
 
@@ -91,18 +91,17 @@ void read_files(int nb_files, char * files[])
 		{
 			//addFolder("name", &repcourant);
 			//get_files_directory(files[i], repcourant);
-		//~ if( erreur )
-			//~ afficher message
 		}
 	}
 }
 
-void begin_dir(char * dir_name)
+char * get_data(struct file_info * file)
 {
-	// à compléter par Pierre
-}
-
-void end_dir(char * dir_name)
-{
-	// à completer par Pierre
+	long s = ntohl(atoi(file->size));
+	FILE * fr = fopen(file->path, "r");
+	char * data = malloc(s);
+	if( fread(data, s, s, fr) < s )
+		perror("erreur dans la récupération des donnés");
+	fclose(fr);
+	return data;
 }

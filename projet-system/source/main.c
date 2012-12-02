@@ -10,20 +10,16 @@
 
 int main( int argc, char* argv[] )
 {	
-	//get_files_directory("Test"); 	
+	//get_files_directory("Test");
 
-
-	/*list_file = (struct pile_file *)malloc(sizeof (struct pile_file));
-	list_file->nb_file = 0;
-	list_file->first_file = NULL;*/
+		struct file_info * fi = get_file_info("read.d");
+		//afficher_file(fi);
+		//free(fi);
 
 	extern int optind, optopt;
 	extern char *optarg;
 	int opt;
-	
-	tar_path = "blabal/bibi";
-
-// le string "abc:d:" représente les paramètre qu'on veut reconnaitre
+// le string "hvc:tr:u:x:f:zd:sm:" représente les paramètre qu'on veut reconnaitre
 // un ":" signifie que le paramêtre prend une valeur après
 	if (argc > 1)
 	{

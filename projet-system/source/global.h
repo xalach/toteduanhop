@@ -20,9 +20,9 @@ struct file_info
 {
 	char* path;
 	char* name;
-	time_t create_time;		// convertible en Char* via ctime(&create_time);
-	ushort mode;			// convertible en Char* via la fonction mode_view(mode) dans out.h
-	long size;				// converti avec htonl
+	char* create_time;		// converti en Char* via ctime(&create_time);
+	char* mode;				// converti en Char* via sprintf(%o)
+	char* size;				// à convertir avec htonl, convertir en long avec atoi() et ntohl()
 };
 
 struct dir_info

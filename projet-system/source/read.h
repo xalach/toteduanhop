@@ -16,9 +16,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	;
 // les actions appropriés
 void read_files(int nb_files, char * files[]);
 
-// marque le début et la fin de lecture d'un dossier
-// utiliser pour construire la hiérarchie dans le fichier XML
-void begin_dir(char * dir_name);
-void end_dir(char * dir_name);
+// retourne les donnée
+char * get_data(struct file_info * file);
 
 #endif /* READ_H_ */
