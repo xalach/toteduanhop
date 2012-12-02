@@ -73,15 +73,21 @@
 								<option id="gnu.cpp.compiler.exe.release.option.optimization.level.1567571870" name="Optimization Level" superClass="gnu.cpp.compiler.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.release.option.debugging.level.854424327" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.1223295048" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">
+							<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.1223295048" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.exe.release.option.optimization.level.2088285462" name="Optimization Level" superClass="gnu.c.compiler.exe.release.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.release.option.debugging.level.897828260" name="Debug Level" superClass="gnu.c.compiler.exe.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.869056846" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/include/libxml2"/>
 								</option>
+								<option id="gnu.c.compiler.option.misc.other.2038013910" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1693622640" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.38838469" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release">
+								<option id="gnu.c.link.option.libs.785315941" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
+								<option id="gnu.c.link.option.ldflags.989829026" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="" valueType="string"/>
+								<option id="gnu.c.link.option.other.254456043" name="Other options (-Xlinker [option])" superClass="gnu.c.link.option.other" valueType="stringList"/>
+								<option id="gnu.c.link.option.userobjs.1815418256" name="Other objects" superClass="gnu.c.link.option.userobjs" valueType="userObjs"/>
+								<option id="gnu.c.link.option.paths.1742966070" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1331506195" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

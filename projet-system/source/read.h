@@ -1,6 +1,8 @@
 #ifndef READ_H_
 #define READ_H_
 
+#include <libxml/tree.h>
+
 int is_compress(char * path);
 
 // construit une structure file_info pour un path donné
@@ -8,7 +10,7 @@ struct file_info * get_file_info(char * path);
 
 // récupère tous les fichiers d'un dossier
 // appel récursif pour lire tous la hiérarchie
-void get_files_directory(char * path);
+void get_files_directory(char * path, xmlNodePtr repcourant)	;
 
 // li tous les fichiers passé en paramêtre et effectue
 // les actions appropriés

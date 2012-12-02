@@ -9,10 +9,12 @@
 #include <dirent.h>
 #include <errno.h>
 #include <string.h>
+#include <libgen.h>
 
 #include "read.h"
 #include "out.h"
 #include "global.h"
+#include "xml_creator.h"
 
 int is_compress(char * path)
 {
@@ -24,7 +26,7 @@ int is_compress(char * path)
 	return bit;
 }
 
-struct file_info * get_file_info(char * path) // add parameter : xmlNodePtr ( repetoire courant )
+struct file_info * get_file_info(char * path)
 {
 	printf("-   - ficher : %s \n", path);
 	struct stat statfile;
@@ -33,7 +35,7 @@ struct file_info * get_file_info(char * path) // add parameter : xmlNodePtr ( re
 	struct file_info * newfile;
 	newfile = (struct file_info *)malloc(sizeof(struct file_info));
 	newfile->path = path;
-	newfile->name = path;
+	newfile->name = basename(path);
 	//newfile->create_time = statfile.st_mtime;  	// se compile mal depuis eclipse
 	newfile->mode = statfile.st_mode;
 	newfile->size = htonl(statfile.st_size);
@@ -41,7 +43,7 @@ struct file_info * get_file_info(char * path) // add parameter : xmlNodePtr ( re
 	return newfile;
 }
 
-void get_files_directory(char * path)	  // add parameter : xmlNodePtr ( repetoire courant )
+void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter : xmlNodePtr ( repetoire courant )
 {
 	printf("ouverture du dossier : %s \n", path);
 	begin_dir(path);
@@ -56,14 +58,13 @@ void get_files_directory(char * path)	  // add parameter : xmlNodePtr ( repetoir
 		if (S_ISDIR (statfile.st_mode))
 		{
 			//if ( strcmp(fname,".") != 0 || strcmp(fname,"..") != 0 )
-				printf("   * sous dossier : %s - \n", fname); 
-			//get_files_directory(fname,addFolder(char* NewFolderName, xmlNodePtr repertoireCourant));
+			printf("   * sous dossier : %s - \n", fname);
+			//get_files_directory(fname, addFolder(fname, &repcourant));
 		}
 		else
 		{
 			printf("   - fichier : %s - \n", fname);
-			// get_file_info(fname);
-			//xml a.ddFile(nomFichier,get_file_info(files[i]),repertoireCourant,DATA(char *)); //getata(file[i]);
+			//addFile(fname,get_file_info(fname),repcourant,""); //get_data(file[i]);
 		}
 	}
 	end_dir(path);
@@ -71,10 +72,11 @@ void get_files_directory(char * path)	  // add parameter : xmlNodePtr ( repetoir
 }
 
 
-// lis tous
+// lis tous les fichiers passé en parametre par l'utilisateur
+// lis recursivement les dossiers
 void read_files(int nb_files, char * files[]) 
 {
-	// xmlNodePtr repetoire courant = xmlCreate(".");
+	//xmlNodePtr repcourant = createXml(".");
 
 	struct stat statfile;
 	int i;
@@ -83,16 +85,15 @@ void read_files(int nb_files, char * files[])
 		stat(files[i], &statfile);
 		if (S_ISREG(statfile.st_mode))
 		{
-			get_file_info(files[i]);
-			//xml addFile(nomFichier,get_file_info(files[i]),repertoireCourant,DATA(char *)); //getata(file[i]);
+			//addFile(basename(files[i]),get_file_info(files[i]),repcourant,""); //get_data(file[i]);
 		}
 		if (S_ISDIR (statfile.st_mode))
 		{
-			//addFolder(char* NewFolderName, xmlNodePtr repertoireCourant)
-			get_files_directory(files[i]/*AddFolder*/); 	// passé en parametre
-		}
+			//addFolder("name", &repcourant);
+			//get_files_directory(files[i], repcourant);
 		//~ if( erreur )
 			//~ afficher message
+		}
 	}
 }
 
