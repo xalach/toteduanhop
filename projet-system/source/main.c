@@ -13,18 +13,21 @@ int main( int argc, char* argv[] )
 {	
 	doc = NULL;
 
-	struct file_info * fi = get_file_info("sources.mk");
+	struct file_info fi = get_file_info("sources.mk");
+	afficher_file(&fi);
 	xmlDocPtr doc = xmlNewDoc("1.0");
 
+	/*
 	//get_files_directory("Test");
 	xmlNodePtr mynode = createXml("unnom", doc);
 	mynode = addFolder("folder1", mynode);
 	int i;
 	for (i=0; i<5; i++)
 	{
-		addFile("file", *fi, mynode, "donne");
+		addFile("file", fi, mynode, "donne");
 	}
 	printXml(doc);
+	*/
 
 		//struct file_info * fi = get_file_info("read.d");
 		//afficher_file(fi);

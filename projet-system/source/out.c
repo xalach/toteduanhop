@@ -18,11 +18,11 @@ void afficher_file(struct file_info * file)
 	printf("*********************\n");
 	printf("Path : %s\n", file->path);
 
-	time_t t = atoi(&file->create_time);
+	time_t t = ntohl(atoi(&file->create_time));
 	printf("date creation : %s\n", ctime(&t));
 
-	printf("size : %ld\n", atol(&file->size));
-	printf("Access mode 0%i\n", atoi(&file->mode));
+	printf("size : %ld\n", ntohl(atol(&file->size)));
+	printf("Access mode 0%i\n", ntohs(atoi(&file->mode)));
 	/*
 	int i;
 	   for(i = 6; i >= 0; i -=3)

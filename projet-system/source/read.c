@@ -37,9 +37,9 @@ struct file_info get_file_info(char * path)
 
 	newfile.path = path;
 	newfile.name = basename(path);
-	sprintf(&newfile.create_time, "%i", statfile.st_mtime);	// se compile mal depuis eclipse
-	sprintf(&newfile.mode, "%i", statfile.st_mode);
-	sprintf(&newfile.size,"%ld", statfile.st_size);			// plante niveau mémoire
+	sprintf(&newfile.create_time, "%i", htonl(statfile.st_mtime));	// se compile mal depuis eclipse
+	sprintf(&newfile.mode, "%i", htons(statfile.st_mode));
+	sprintf(&newfile.size,"%ld", htonl(statfile.st_size));			// plante niveau mémoire
 
 	return newfile;
 }
