@@ -1,4 +1,5 @@
 projet-system/source/Debug/*.o
+projet-system/source/Debug/*.d
 projet-system/source/Release/
 projet-system/source/.*
 projet-system/source/*~

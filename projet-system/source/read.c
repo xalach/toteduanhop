@@ -14,7 +14,7 @@
 #include "read.h"
 #include "out.h"
 #include "global.h"
-#include "xml_creator.c"
+#include "xml_creator.h"
 
 int is_compress(char * path)
 {
@@ -60,7 +60,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 		{
 			//if ( strcmp(fname,".") != 0 || strcmp(fname,"..") != 0 )
 			printf("   * sous dossier : %s - \n", fname);
-			//get_files_directory(fname, addFolder(fname, &repcourant));
+			//get_files_directory(fname, addFolder(fname, repcourant));
 		}
 		else
 		{
@@ -89,7 +89,7 @@ void read_files(int nb_files, char * files[])
 		}
 		if (S_ISDIR (statfile.st_mode))
 		{
-			//addFolder("name", &repcourant);
+			//addFolder("name", repcourant);
 			//get_files_directory(files[i], repcourant);
 		}
 	}

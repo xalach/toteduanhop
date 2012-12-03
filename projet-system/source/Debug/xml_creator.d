@@ -1,4 +1,5 @@
-xml_creator.d: ../xml_creator.c /usr/include/libxml2/libxml/parser.h \
+xml_creator.d: ../xml_creator.c ../xml_creator.h ../global.h \
+ /usr/include/libxml2/libxml/parser.h \
  /usr/include/libxml2/libxml/xmlversion.h \
  /usr/include/libxml2/libxml/xmlexports.h \
  /usr/include/libxml2/libxml/tree.h \
@@ -16,7 +17,11 @@ xml_creator.d: ../xml_creator.c /usr/include/libxml2/libxml/parser.h \
  /usr/include/libxml2/libxml/xlink.h /usr/include/libxml2/libxml/SAX2.h \
  /usr/include/libxml2/libxml/xmlmemory.h \
  /usr/include/libxml2/libxml/threads.h \
- /usr/include/libxml2/libxml/xinclude.h ../global.h
+ /usr/include/libxml2/libxml/xinclude.h
+
+../xml_creator.h:
+
+../global.h:
 
 /usr/include/libxml2/libxml/parser.h:
 
@@ -61,5 +66,3 @@ xml_creator.d: ../xml_creator.c /usr/include/libxml2/libxml/parser.h \
 /usr/include/libxml2/libxml/threads.h:
 
 /usr/include/libxml2/libxml/xinclude.h:
-
-../global.h:

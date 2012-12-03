@@ -7,13 +7,21 @@
 #include "global.h"
 #include "out.h"
 #include "read.h"
+#include "xml_creator.h"
 
 int main( int argc, char* argv[] )
 {	
+	struct file_info * fi = get_file_info("sources.mk");
 	doc = NULL;
 	//get_files_directory("Test");
-
-
+	xmlNodePtr mynode = createXml("unnom", doc);
+	mynode = addFolder("folder1", mynode);
+	int i;
+	for (i=0; i<5; i++)
+	{
+		addFile((char)i, *fi, mynode, "donne");
+	}
+	printXml(doc);
 		//struct file_info * fi = get_file_info("read.d");
 		//afficher_file(fi);
 		//free(fi);

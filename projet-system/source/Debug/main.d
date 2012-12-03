@@ -17,7 +17,8 @@ main.d: ../main.c ../record.h ../global.h \
  /usr/include/libxml2/libxml/xlink.h /usr/include/libxml2/libxml/SAX2.h \
  /usr/include/libxml2/libxml/xmlmemory.h \
  /usr/include/libxml2/libxml/threads.h \
- /usr/include/libxml2/libxml/xinclude.h ../out.h ../read.h
+ /usr/include/libxml2/libxml/xinclude.h ../out.h ../read.h \
+ ../xml_creator.h
 
 ../record.h:
 
@@ -70,3 +71,5 @@ main.d: ../main.c ../record.h ../global.h \
 ../out.h:
 
 ../read.h:
+
+../xml_creator.h:
