@@ -1,8 +1,4 @@
-#include <libxml/parser.h>
-#include <libxml/xmlIO.h>
-#include <libxml/xinclude.h>
-#include <libxml/tree.h>
-#include "global.h"
+#include "xml_creator.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -34,7 +30,7 @@ xmlNodePtr addFolder(char *folderName, xmlNodePtr currentNode)
 }
 
 //Affiche l'arborescence du document xml passé en entrée
-void printXML(xmlDocPtr doc)
+void printXml(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = NULL;
     
