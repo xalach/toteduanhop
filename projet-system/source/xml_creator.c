@@ -7,10 +7,11 @@
 #include <string.h>
 
 
-xmlNodePtr createXml(char *rootFolder) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
+xmlNodePtr createXml(char *rootFolder, xmlDocPtr doc) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
 {
   xmlNodePtr nodePtr = xmlNewNode(NULL,rootFolder);
-  xmlDocSetRootElement(xmlNewDoc("1.0"), nodePtr);
+  doc = xmlNewDoc("1.0"); // à garder pour l'affichage et l'enregistrement du xml
+  xmlDocSetRootElement(doc, nodePtr);
   return (nodePtr);
 }
 
@@ -27,8 +28,35 @@ void addFile(char *name, struct file_info infos, xmlNodePtr currentNode, char *d
 
 
 //Ajoute un répertoire au répertoire courant(currentNode) et retourne un pointeur sur le nouveau répertoire.
-xmlNodePtr addFolder(char *folderName, xmlNodePtr *currentNode)
+xmlNodePtr addFolder(char *folderName, xmlNodePtr currentNode)
 {
-  //xmlNodePtr currentNode =  
   return(xmlAddChild(currentNode,xmlNewNode(NULL,folderName)));
+}
+
+//Affiche l'arborescence du document xml passé en entrée
+void printXML(xmlDocPtr doc)
+{
+    xmlNodePtr rootNode = NULL;
+    
+    rootNode = xmlDocGetRootElement(doc); //récupère la node root
+
+    printElements(rootNode);
+
+    xmlFreeDoc(doc);
+    xmlCleanupParser();
+}
+
+
+
+void printElements(xmlNodePtr  a_node)
+{
+    xmlNodePtr currentNode = NULL;
+
+    for (currentNode = a_node; currentNode; currentNode = currentNode->next) {
+        if (currentNode->type == XML_ELEMENT_NODE) {
+            printf("node type: Element, name: %s\n", currentNode->name);
+        }
+
+        printElements(currentNode->children);
+    }
 }
