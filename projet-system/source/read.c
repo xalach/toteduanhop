@@ -36,11 +36,10 @@ struct file_info * get_file_info(char * path)
 	newfile = (struct file_info *)malloc(sizeof(struct file_info));
 
 	newfile->path = path;
-
 	newfile->name = basename(path);
 	newfile->create_time = ctime(&statfile.st_mtime);  	// se compile mal depuis eclipse
-	//sprintf(newfile->mode, "%d", statfile.st_mode);		// plante niveau mémoire
-	//newfile->size = sprintf(newfile->size,"%s", statfile.st_size);	// plante niveau mémoire
+	sprintf(&newfile->mode, "%i", (int)statfile.st_mode);
+	sprintf(&newfile->size,"%ld", htonl(statfile.st_size));	// plante niveau mémoire
 
 	return newfile;
 }
