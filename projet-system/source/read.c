@@ -26,20 +26,20 @@ int is_compress(char * path)
 	return bit;
 }
 
-struct file_info * get_file_info(char * path)
+struct file_info get_file_info(char * path)
 {
 
 	struct stat statfile;
 	stat(path, &statfile);
 
-	struct file_info * newfile;
-	newfile = (struct file_info *)malloc(sizeof(struct file_info));
+	struct file_info newfile;
+	//newfile = (struct file_info *)malloc(sizeof(struct file_info));
 
-	newfile->path = path;
-	newfile->name = basename(path);
-	newfile->create_time = ctime(&statfile.st_mtime);  	// se compile mal depuis eclipse
-	sprintf(&newfile->mode, "%i", (int)statfile.st_mode);
-	sprintf(&newfile->size,"%ld", htonl(statfile.st_size));	// plante niveau mémoire
+	newfile.path = path;
+	newfile.name = basename(path);
+	sprintf(&newfile.create_time, "%i", statfile.st_mtime);	// se compile mal depuis eclipse
+	sprintf(&newfile.mode, "%i", statfile.st_mode);
+	sprintf(&newfile.size,"%ld", statfile.st_size);			// plante niveau mémoire
 
 	return newfile;
 }
@@ -59,12 +59,13 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 		{
 			//if ( strcmp(fname,".") != 0 || strcmp(fname,"..") != 0 )
 			printf("   * sous dossier : %s - \n", fname);
-			//get_files_directory(fname, addFolder(fname, repcourant));
+			get_files_directory(fname, addFolder(fname, repcourant));
 		}
 		else
 		{
 			printf("   - fichier : %s - \n", fname);
-			//addFile(fname,get_file_info(fname),repcourant,""); //get_data(file[i]);
+			struct file_info fi = get_file_info(fname);
+			addFile(fname, fi,repcourant,get_data(&fi)); //get_data(file[i]);
 		}
 	}
 	closedir(d);
@@ -84,7 +85,7 @@ void read_files(int nb_files, char * files[])
 		stat(files[i], &statfile);
 		if (S_ISREG(statfile.st_mode))
 		{
-			//addFile(basename(files[i]),get_file_info(files[i]),repcourant,""); //get_data(file[i]);
+		//	addFile(basename(files[i]),get_file_info(files[i]),repcourant,""); //get_data(file[i]);
 		}
 		if (S_ISDIR (statfile.st_mode))
 		{

@@ -6,7 +6,7 @@
 int is_compress(char * path);
 
 // construit une structure file_info pour un path donné
-struct file_info * get_file_info(char * path);
+struct file_info get_file_info(char * path);
 
 // récupère tous les fichiers d'un dossier
 // appel récursif pour lire tous la hiérarchie

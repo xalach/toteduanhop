@@ -11,8 +11,8 @@
 
 int main( int argc, char* argv[] )
 {	
-	struct file_info * fi = get_file_info("sources.mk");
-	afficher_file(fi);
+	struct file_info fi = get_file_info("sources.mk");
+	afficher_file(&fi);
 	doc = NULL;
 	//get_files_directory("Test");
 	/*xmlNodePtr mynode = createXml("unnom", doc);

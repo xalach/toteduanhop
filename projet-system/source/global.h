@@ -24,9 +24,9 @@ struct file_info
 {
 	char* path;
 	char* name;
-	char* create_time;		// converti en Char* via ctime(&create_time);
-	char* mode;				// converti en Char* via sprintf(%o)
-	char* size;				// à convertir avec htonl, convertir en long avec atoi() et ntohl()
+	char* create_time[sizeof(time_t)];		// converti en Char* via ctime(&create_time);
+	char* mode[sizeof(mode_t)];				// converti en Char* via sprintf(%o)
+	char* size[sizeof(off_t)];				// à convertir avec htonl, convertir en long avec atoi() et ntohl()
 };
 
 struct dir_info
