@@ -6,7 +6,7 @@
 xmlNodePtr createXml(char *rootFolder, xmlDocPtr doc) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
 {
   xmlNodePtr nodePtr = xmlNewNode(NULL,rootFolder);
-  doc = xmlNewDoc("1.0"); // à garder pour l'affichage et l'enregistrement du xml
+  // doc = xmlNewDoc("1.0"); // à garder pour l'affichage et l'enregistrement du xml
   xmlDocSetRootElement(doc, nodePtr);
   return (nodePtr);
 }
@@ -28,6 +28,22 @@ xmlNodePtr addFolder(char *folderName, xmlNodePtr currentNode)
 {
   return(xmlAddChild(currentNode,xmlNewNode(NULL,folderName)));
 }
+/*
+xmlNodePtr getNode(char *name, xmlDocPtr doc)
+{
+  xmlNodePtr currentNode = xmlDocGetRootElement(doc); //récupère la node root
+  xmlNodePtr resultNode = parcoursNode(currentNoden,name);
+}
+
+xmlNodePtr parcoursNode(xmlNodePtr a_node, char *name)
+{
+  xmlNodePtr currentNode = NULL;
+    for (currentNode = a_node; currentNode; currentNode = currentNode->next) 
+      {
+	parcoursNode(currentNode->children,name);
+      }
+}*/
+
 
 //Affiche l'arborescence du document xml passé en entrée
 void printXml(xmlDocPtr doc)
@@ -35,24 +51,20 @@ void printXml(xmlDocPtr doc)
     xmlNodePtr rootNode = NULL;
     
     rootNode = xmlDocGetRootElement(doc); //récupère la node root
-
+    printf("ROOT = %s\n", rootNode->name);
     printElements(rootNode);
 
-    xmlFreeDoc(doc);
     xmlCleanupParser();
 }
-
-
 
 void printElements(xmlNodePtr  a_node)
 {
     xmlNodePtr currentNode = NULL;
-
-    for (currentNode = a_node; currentNode; currentNode = currentNode->next) {
-        if (currentNode->type == XML_ELEMENT_NODE) {
-            printf("node type: Element, name: %s\n", currentNode->name);
-        }
-
-        printElements(currentNode->children);
-    }
+    printf("currentNode = %s\n",a_node->name);
+    for (currentNode = a_node; currentNode; currentNode = currentNode->next) 
+      {
+	printf("Name: %s\n", currentNode->name);
+	printElements(currentNode->children);
+      }
+    printf("----------\n");
 }
