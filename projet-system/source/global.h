@@ -4,6 +4,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <libxml/parser.h>
+#include <libxml/xmlIO.h>
+#include <libxml/xinclude.h>
+#include <libxml/tree.h>
 
 const char * right_values[8];
 
@@ -32,34 +36,7 @@ struct dir_info
 	ushort mode;			// convertible en Char* via la fonction mode_view(mode) dans out.h
 };
 
-/**********************************************************************
- * 	PILE
- **********************************************************************/
-
-/*
- // definir la structure de base d'une pile
-
-struct element_pile
-{
-	struct file_info info;
-	struct element_pile * next;
-};
-
-// la pile de fichier
-struct pile_file
-{
-	int nb_file; 							// le nombre d'élément dans la pile
-	struct element_pile * first_file;		// pointeur vers le premier fichier
-};
-
-struct element_pile * entete_pile(struct pile_file * pile);
-struct file_info * info_element(struct element_pile * element);
-struct element_pile * next_element(struct element_pile * element);
-void empiler(struct pile_file * pile, char * p, char * n, time_t * ct, ushort * mode, long * size);
-struct element_pile * depiler(struct pile_file * pile);
-void liberer_pile(struct pile_file * pile);
-
-struct pile_file * list_file; */
+xmlDocPtr doc;
 
 
 #endif /* GLOBAL_H_ */

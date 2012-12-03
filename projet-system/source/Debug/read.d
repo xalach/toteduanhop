@@ -16,7 +16,8 @@ read.d: ../read.c ../read.h /usr/include/libxml2/libxml/tree.h \
  /usr/include/libxml2/libxml/encoding.h \
  /usr/include/libxml2/libxml/xmlIO.h /usr/include/libxml2/libxml/SAX.h \
  /usr/include/libxml2/libxml/xlink.h /usr/include/libxml2/libxml/SAX2.h \
- ../out.h ../global.h ../xml_creator.h
+ ../out.h ../global.h /usr/include/libxml2/libxml/xinclude.h \
+ ../xml_creator.c
 
 ../read.h:
 
@@ -66,4 +67,6 @@ read.d: ../read.c ../read.h /usr/include/libxml2/libxml/tree.h \
 
 ../global.h:
 
-../xml_creator.h:
+/usr/include/libxml2/libxml/xinclude.h:
+
+../xml_creator.c:

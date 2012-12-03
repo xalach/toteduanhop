@@ -10,9 +10,11 @@
 
 int main( int argc, char* argv[] )
 {	
+	doc = NULL;
 	//get_files_directory("Test");
 
-		struct file_info * fi = get_file_info("read.d");
+
+		//struct file_info * fi = get_file_info("read.d");
 		//afficher_file(fi);
 		//free(fi);
 

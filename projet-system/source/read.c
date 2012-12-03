@@ -14,7 +14,7 @@
 #include "read.h"
 #include "out.h"
 #include "global.h"
-#include "xml_creator.h"
+#include "xml_creator.c"
 
 int is_compress(char * path)
 {
