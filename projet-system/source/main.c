@@ -13,9 +13,13 @@ int main( int argc, char* argv[] )
 {	
 	doc = NULL;
 
-	struct file_info fi = get_file_info("sources.mk");
+	/*struct file_info fi = get_file_info("Test");
 	afficher_file(&fi);
+	create_directory(&fi);*/
 	xmlDocPtr doc = xmlNewDoc("1.0");
+
+	xmlNodePtr mynode = createXml("unnom");
+	get_files_directory("Test", mynode);
 
 	/*
 	//get_files_directory("Test");

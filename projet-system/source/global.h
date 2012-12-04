@@ -29,13 +29,6 @@ struct file_info
 	char* size[sizeof(off_t)];				// à convertir avec htonl, convertir en long avec atoi() et ntohl()
 };
 
-struct dir_info
-{
-	char* name;
-	time_t create_time;		// convertible en Char* via ctime(&create_time);
-	ushort mode;			// convertible en Char* via la fonction mode_view(mode) dans out.h
-};
-
 xmlDocPtr doc;
 
 
