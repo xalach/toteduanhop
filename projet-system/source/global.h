@@ -11,13 +11,7 @@
 
 const char * right_values[8];
 
-struct tar_header
-{
-	double size;
-	int filecount;
-};
-
-char* tar_path;				// chemin de sortie du fichier tar, NULL sinon
+char* tar_path;				// chemin courant du logiciel
 int verbose;				// booléen pour activité la verbose du logiciel
 
 struct file_info

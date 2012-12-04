@@ -48,9 +48,8 @@ struct file_info get_file_info(char * path)
 
 void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter : xmlNodePtr ( repetoire courant )
 {
-	printf("\n dossier courant : %s\n", get_current_dir_name());
-	printf("ouverture du dossier : %s \n", path);
-	struct stat statfile;
+	//printf("\n dossier courant : %s\n", get_current_dir_name());
+	//printf("ouverture du dossier : %s \n", path);
 
 // UNE AUTRE APPROCHE POUR PARCOURIR UN DOSSIER
 // 		plus haut niveau mais retire bien le "." et le ".."
@@ -58,6 +57,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 //
 //		pour le parcours recursif : deux solutions
    struct dirent **namelist;
+   struct stat statfile;
    int n;
 
    n = scandir(path, &namelist, 0, alphasort);
@@ -74,15 +74,18 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 		   {
 			   if (S_ISDIR (statfile.st_mode))
 				{
-					printf("   * sous dossier : %s - \n", fname);
-
+					///printf("   * sous dossier : %s - \n", fname);
+				   struct file_info fi = get_file_info(fname);
+				   afficher_file(&fi);
 					get_files_directory(fname, addFolder(fname, repcourant));
+					//get_files_directory(fname, addFolder(fname, fi, repcourant));
 
 				}
 				else //if (S_ISREG(statfile.st_mode))
 				{
-					printf("   - fichier : %s -\n", fname);
+					//printf("   - fichier : %s -\n", fname);
 					struct file_info fi = get_file_info(fname);
+					afficher_file(&fi);
 					addFile(fname, fi, repcourant, "TOTO"); //get_data(file[i]);
 				}
 		   }
@@ -134,4 +137,16 @@ char * get_data(struct file_info * file)
 	fclose(fr);
 	return data;*/
 	return "";
+}
+
+int is_more_recent(char * path1, char * path2)
+{
+	struct stat statfile;
+
+	stat(path1, &statfile);
+	time_t f1 = statfile.st_mtime;
+	stat(path2, &statfile);
+	time_t f2 = statfile.st_mtime;
+
+	return f1-f2 > 0 ? 1 : 0;
 }

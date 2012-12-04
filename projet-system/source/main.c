@@ -2,6 +2,9 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <stdlib.h>
+#include <time.h>
+
+#include <string.h>
 
 #include "record.h"
 #include "global.h"
@@ -11,15 +14,17 @@
 
 int main( int argc, char* argv[] )
 {	
-	doc = NULL;
-
+	doc = xmlNewDoc("1.0");
 	/*struct file_info fi = get_file_info("Test");
 	afficher_file(&fi);
 	create_directory(&fi);*/
-	xmlDocPtr doc = xmlNewDoc("1.0");
+
+	is_more_recent("read.o", "record.o");
+	is_more_recent("Test", "/home/arnaud");
+	is_more_recent("Test", "read.o");
 
 	xmlNodePtr mynode = createXml("unnom");
-	get_files_directory("Test", mynode);
+	//get_files_directory("Test", mynode);
 
 	/*
 	//get_files_directory("Test");
