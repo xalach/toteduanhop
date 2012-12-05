@@ -3,7 +3,7 @@
 #include <string.h>
 
 
-xmlNodePtr createXml(char *rootFolder, xmlDocPtr doc) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
+xmlNodePtr createXml(char *rootFolder) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
 {
   xmlNodePtr nodePtr = xmlNewNode(NULL,rootFolder);
   xmlDocSetRootElement(doc, nodePtr);

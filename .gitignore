@@ -3,6 +3,7 @@ projet-system/source/Debug/*.d
 projet-system/source/Release/
 projet-system/source/.*
 projet-system/source/*~
+projet-system/.~*
 projet-system/source/Debug/*~
 projet-system/source/Debug/projet-system-tar
 projet-system/*~
