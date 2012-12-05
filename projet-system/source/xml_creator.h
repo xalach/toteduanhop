@@ -1,7 +1,7 @@
 #include "global.h"
 
 
-xmlNodePtr createXml(char*rootFolder, xmlDocPtr doc);
+xmlNodePtr createXml(char*rootFolder);
 
 void addFile(char *name,struct file_info infos, xmlNodePtr currentNode,char *data);
 
