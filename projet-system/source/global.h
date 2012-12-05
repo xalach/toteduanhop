@@ -14,11 +14,11 @@ const char * right_values[8];
 char* tar_path;				// chemin courant du logiciel
 int verbose;				// booléen pour activité la verbose du logiciel
 
-xmlDocPtr doc ;
+xmlDocPtr doc;
+xmlDocPtr doctest;
 
 struct file_info
 {
-	char* path;
 	char* name;
 	char* create_time[sizeof(time_t)];		// converti en Char* via ctime(&create_time);
 	char* mode[sizeof(mode_t)];				// converti en Char* via sprintf(%o)

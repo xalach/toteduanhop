@@ -14,7 +14,8 @@
 
 int main( int argc, char* argv[] )
 {	
-  doc = xmlNewDoc("1.0");
+	doc = xmlNewDoc("1.0");
+	doctest = xmlNewDoc("1.0");
 	struct file_info fi = get_file_info("Test");
 	//afficher_file(&fi);
 	//create_directory(&fi);
@@ -23,7 +24,7 @@ int main( int argc, char* argv[] )
 	is_more_recent("Test", "/home/arnaud");
 	is_more_recent("Test", "read.o");
 
-	xmlNodePtr mynode = createXml("unnom",doc);
+	xmlNodePtr mynode = createXml("unnom");
 	//get_files_directory("Test", mynode);
 
 	
@@ -35,7 +36,7 @@ int main( int argc, char* argv[] )
 	addFile("testFile3", &fi, mynode, "donne3");
 	addFile("testFile4", &fi, mynode, "donne4");
 	addFile("testFile5", &fi, mynode, "donne5");
-	printXml(doc);
+	printXml();
 	xmlSaveFormatFileEnc("test.xml", doc, "utf-8", 1 );
 	
 

@@ -1,9 +1,10 @@
-#include "xml_creator.h"
 #include <stdio.h>
 #include <string.h>
 
+#include "xml_creator.h"
 
-xmlNodePtr createXml(char *rootFolder, xmlDocPtr doc) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
+
+xmlNodePtr createXml(char *rootFolder) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
 {
   xmlNodePtr nodePtr = xmlNewNode(NULL,rootFolder);
   // doc = xmlNewDoc("1.0"); // à garder pour l'affichage et l'enregistrement du xml
@@ -49,7 +50,7 @@ xmlNodePtr parcoursNode(xmlNodePtr a_node, char *name)
 }*/
 
 //Affiche l'arborescence du document xml passé en entrée
-void printXml(xmlDocPtr doc)
+void printXml()
 {
     xmlNodePtr rootNode = NULL;
     char indentation[100]= "";
@@ -73,4 +74,24 @@ void printElements(xmlNodePtr a_node, char *indentation)
 	if(currentNode->children != NULL)
 	  printElements(currentNode->children,indentation);
       }
+}
+
+int tar_root_files(struct file_info ** files)
+{
+	return 0;
+}
+
+int tar_folder_files(char * folder, struct file_info ** files)
+{
+	return 0;
+}
+
+void open_tar(char * tarfile)
+{
+
+}
+
+char * get_data_tar_file(char * file)
+{
+	return "";
 }

@@ -7,8 +7,9 @@
 #include <utime.h>
  #include <errno.h>
 
-
 #include "out.h"
+#include "xml_creator.h"
+
 
 void write_verbose(char * message)
 {
@@ -20,8 +21,6 @@ void afficher_file(struct file_info * file)
 {
 
 	printf("******** %s *********\n", file->name);
-	printf("*   Path : %s\n", file->path);
-
 	time_t t = ntohl(atoi(&file->create_time));
 	printf("*   date creation : %s", ctime(&t));
 	printf("*   size : %ld\n", ntohl(atol(&file->size)));
@@ -53,7 +52,58 @@ void create_directory(struct file_info * dir)
 
 	struct utimbuf chgtm;
 	chgtm.modtime = ntohl(atoi(&dir->create_time));
-	if ( utime(dir->path, NULL) != 0 )
+	if ( utime(dir->name, NULL) != 0 )
 		printf("erreur dans le changement de date");
 	printf("dossier créer\n");
+}
+
+void create_folder_files(char * dirpath)
+{
+	struct file_info **flist;
+	int n;
+	n = tar_folder_files(dirpath, &flist);
+	if ( n > 0 )
+	{
+	   chdir(dirpath);
+	   int i=0;
+	   while ( i < n)
+	   {
+		   mode_t mf = ntohs(atoi(&flist[i]->mode));
+		   if (S_ISREG(mf))
+			{
+			   create_file(flist[i]);
+			}
+			if (S_ISDIR (mf))
+			{
+				create_directory(flist[i]);
+				create_folder_files(flist[i]->name);
+			}
+	   }
+	   chdir("..");
+	}
+}
+
+void create_tar_files(char * tarfile)
+{
+	open_tar(tarfile);
+	struct file_info **flist;
+	int n = tar_root_files(&flist);
+	if ( n > 0 )
+	{
+	   int i=0;
+	   while ( i < n)
+	   {
+		   mode_t mf = ntohs(atoi(&flist[i]->mode));
+		   if (S_ISREG(mf))
+			{
+			   create_file(flist[i]);
+			}
+			if (S_ISDIR (mf))
+			{
+				create_directory(flist[i]);
+				create_folder_files(flist[i]->name);
+			}
+	   }
+	}
+	// else le tar est vide
 }

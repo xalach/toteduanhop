@@ -35,9 +35,7 @@ struct file_info get_file_info(char * path)
 	stat(path, &statfile);
 
 	struct file_info newfile;
-	//newfile = (struct file_info *)malloc(sizeof(struct file_info));
 
-	newfile.path = realpath(path,NULL);
 	newfile.name = basename(path);
 	sprintf(&newfile.create_time, "%i", htonl(statfile.st_mtime));	// se compile mal depuis eclipse
 	sprintf(&newfile.mode, "%i", htons(statfile.st_mode));
@@ -107,7 +105,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 void read_files(int nb_files, char * files[]) 
 {
   
-  xmlNodePtr repcourant = createXml(".",doc);
+  xmlNodePtr repcourant = createXml(".");
 
 	struct stat statfile;
 	int i;
