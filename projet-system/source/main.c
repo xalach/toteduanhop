@@ -17,11 +17,13 @@ int main( int argc, char* argv[] )
 	xmlNodePtr mynode = createXml("unnom", doc);
 	mynode = addFolder("folder1", mynode);
 	int i;
-	for (i=0; i<5; i++)
-	{
-		addFile("file", *fi, mynode, "donne");
-	}
+	addFile("testFile1", *fi, mynode, "donne1");
+	addFile("testFile2", *fi, mynode, "donne2");
+	addFile("testFile3", *fi, mynode, "donne3");
+	addFile("testFile4", *fi, mynode, "donne4");
+	addFile("testFile5", *fi, mynode, "donne5");
 	printXml(doc);
+	xmlSaveFormatFileEnc("test.xml", doc, "utf-8", 1 );
 
 		//struct file_info * fi = get_file_info("read.d");
 		//afficher_file(fi);

@@ -15,11 +15,15 @@ xmlNodePtr createXml(char *rootFolder, xmlDocPtr doc) //Créer le document xml(!
 //Ajoute un fichier au répertoire courant(currentNode) avec les attribut de file_info correspondants.
 void addFile(char *name, struct file_info infos, xmlNodePtr currentNode, char *data)
 {
+  printf("1: %s\n",name);
+  printf("currentNode name = %s\n",currentNode->name);
   xmlNodePtr filePtr = xmlAddChild(currentNode,xmlNewNode(NULL,name));
+  printf("2: %s\n",name);
   xmlNewChild(filePtr,NULL,"Time",infos.create_time);
-  xmlNewChild(filePtr,NULL,"Mode",infos.mode);
-  xmlNewChild(filePtr,NULL,"Size",infos.size);
+  xmlNewChild(filePtr,NULL,"Mode",&infos.mode);
+  xmlNewChild(filePtr,NULL,"Size",&infos.size);
   xmlNewChild(filePtr,NULL,"Data",data);
+  printf("Fichier Ajouté\n");
 }
 
 
@@ -44,7 +48,6 @@ xmlNodePtr parcoursNode(xmlNodePtr a_node, char *name)
       }
 }*/
 
-
 //Affiche l'arborescence du document xml passé en entrée
 void printXml(xmlDocPtr doc)
 {
@@ -64,7 +67,9 @@ void printElements(xmlNodePtr  a_node)
     for (currentNode = a_node; currentNode; currentNode = currentNode->next) 
       {
 	printf("Name: %s\n", currentNode->name);
-	printElements(currentNode->children);
+	printf("Content = %s\n",currentNode->content);
+	if(currentNode->children != NULL)
+	  printElements(currentNode->children);
       }
     printf("----------\n");
 }
