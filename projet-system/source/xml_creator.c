@@ -6,7 +6,6 @@
 xmlNodePtr createXml(char *rootFolder, xmlDocPtr doc) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
 {
   xmlNodePtr nodePtr = xmlNewNode(NULL,rootFolder);
-  // doc = xmlNewDoc("1.0"); // à garder pour l'affichage et l'enregistrement du xml
   xmlDocSetRootElement(doc, nodePtr);
   return (nodePtr);
 }
@@ -15,11 +14,13 @@ xmlNodePtr createXml(char *rootFolder, xmlDocPtr doc) //Créer le document xml(!
 //Ajoute un fichier au répertoire courant(currentNode) avec les attribut de file_info correspondants.
 void addFile(char *name, struct file_info infos, xmlNodePtr currentNode, char *data)
 {
+  printf("ADD fichier %s\n",name);
   xmlNodePtr filePtr = xmlAddChild(currentNode,xmlNewNode(NULL,name));
   xmlNewChild(filePtr,NULL,"Time",infos.create_time);
-  xmlNewChild(filePtr,NULL,"Mode",infos.mode);
-  xmlNewChild(filePtr,NULL,"Size",infos.size);
+  xmlNewChild(filePtr,NULL,"Mode",&infos.mode);
+  xmlNewChild(filePtr,NULL,"Size",&infos.size);
   xmlNewChild(filePtr,NULL,"Data",data);
+  printf("END fichier\n");
 }
 
 
@@ -64,7 +65,9 @@ void printElements(xmlNodePtr  a_node)
     for (currentNode = a_node; currentNode; currentNode = currentNode->next) 
       {
 	printf("Name: %s\n", currentNode->name);
-	printElements(currentNode->children);
+	printf("Content : %s\n", currentNode->content);
+	if(currentNode->children != NULL)
+	  printElements(currentNode->children);
       }
     printf("----------\n");
 }

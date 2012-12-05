@@ -16,11 +16,12 @@ int main( int argc, char* argv[] )
 	//get_files_directory("Test");
 	xmlNodePtr mynode = createXml("unnom", doc);
 	mynode = addFolder("folder1", mynode);
-	int i;
-	for (i=0; i<5; i++)
-	{
-		addFile("file", *fi, mynode, "donne");
-	}
+	  addFile("file1", *fi, mynode, "donne1");
+	  addFile("file2", *fi, mynode, "donne2");
+	  addFile("file3", *fi, mynode, "donne3");
+	mynode = addFolder("folder2",mynode);
+	  addFile("file4", *fi, mynode, "donne4");
+	  addFile("file5", *fi, mynode, "donne5");
 	printXml(doc);
 
 		//struct file_info * fi = get_file_info("read.d");
