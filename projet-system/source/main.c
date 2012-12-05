@@ -14,31 +14,30 @@
 
 int main( int argc, char* argv[] )
 {	
-	doc = xmlNewDoc("1.0");
-	/*struct file_info fi = get_file_info("Test");
-	afficher_file(&fi);
-	create_directory(&fi);*/
+  doc = xmlNewDoc("1.0");
+	struct file_info fi = get_file_info("Test");
+	//afficher_file(&fi);
+	//create_directory(&fi);
 
 	is_more_recent("read.o", "record.o");
 	is_more_recent("Test", "/home/arnaud");
 	is_more_recent("Test", "read.o");
 
-	xmlNodePtr mynode = createXml("unnom");
+	xmlNodePtr mynode = createXml("unnom",doc);
 	//get_files_directory("Test", mynode);
 
-	/*
+	
 	//get_files_directory("Test");
-	xmlNodePtr mynode = createXml("unnom", doc);
-	mynode = addFolder("folder1", mynode);
-	int i;
-	addFile("testFile1", *fi, mynode, "donne1");
-	addFile("testFile2", *fi, mynode, "donne2");
-	addFile("testFile3", *fi, mynode, "donne3");
-	addFile("testFile4", *fi, mynode, "donne4");
-	addFile("testFile5", *fi, mynode, "donne5");
+
+	mynode = addFolder("folder1",&fi, mynode);
+	addFile("testFile1", &fi, mynode, "donne1");
+	addFile("testFile2", &fi, mynode, "donne2");
+	addFile("testFile3", &fi, mynode, "donne3");
+	addFile("testFile4", &fi, mynode, "donne4");
+	addFile("testFile5", &fi, mynode, "donne5");
 	printXml(doc);
 	xmlSaveFormatFileEnc("test.xml", doc, "utf-8", 1 );
-	*/
+	
 
 	//struct file_info * fi = get_file_info("read.d");
 		//afficher_file(fi);

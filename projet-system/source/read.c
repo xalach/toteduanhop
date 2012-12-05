@@ -77,7 +77,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 					///printf("   * sous dossier : %s - \n", fname);
 				   struct file_info fi = get_file_info(fname);
 				   afficher_file(&fi);
-					get_files_directory(fname, addFolder(fname, repcourant));
+				   //get_files_directory(fname, addFolder(fname, repcourant));
 					//get_files_directory(fname, addFolder(fname, fi, repcourant));
 
 				}
@@ -86,7 +86,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 					//printf("   - fichier : %s -\n", fname);
 					struct file_info fi = get_file_info(fname);
 					afficher_file(&fi);
-					addFile(fname, fi, repcourant, "TOTO"); //get_data(file[i]);
+					//addFile(fname, fi, repcourant, "TOTO"); //get_data(file[i]);
 				}
 		   }
 		   else
@@ -106,7 +106,8 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 // lis recursivement les dossiers
 void read_files(int nb_files, char * files[]) 
 {
-	xmlNodePtr repcourant = createXml(".");
+  
+  xmlNodePtr repcourant = createXml(".",doc);
 
 	struct stat statfile;
 	int i;
@@ -116,11 +117,11 @@ void read_files(int nb_files, char * files[])
 		if (S_ISREG(statfile.st_mode))
 		{
 			struct file_info fi = get_file_info(files[i]);
-			addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
+			//addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
 		}
 		if (S_ISDIR (statfile.st_mode))
 		{
-			addFolder("name", repcourant);
+		  //addFolder("name", repcourant);
 			get_files_directory(files[i], repcourant);
 		}
 	}

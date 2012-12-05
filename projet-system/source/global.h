@@ -14,6 +14,8 @@ const char * right_values[8];
 char* tar_path;				// chemin courant du logiciel
 int verbose;				// booléen pour activité la verbose du logiciel
 
+xmlDocPtr doc ;
+
 struct file_info
 {
 	char* path;

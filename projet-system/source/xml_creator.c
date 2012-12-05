@@ -3,7 +3,7 @@
 #include <string.h>
 
 
-xmlNodePtr createXml(char *rootFolder) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
+xmlNodePtr createXml(char *rootFolder, xmlDocPtr doc) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
 {
   xmlNodePtr nodePtr = xmlNewNode(NULL,rootFolder);
   // doc = xmlNewDoc("1.0"); // à garder pour l'affichage et l'enregistrement du xml
@@ -13,24 +13,24 @@ xmlNodePtr createXml(char *rootFolder) //Créer le document xml(!= d'un fichier)
 
 
 //Ajoute un fichier au répertoire courant(currentNode) avec les attribut de file_info correspondants.
-void addFile(char *name, struct file_info infos, xmlNodePtr currentNode, char *data)
+void addFile(char *name, struct file_info *infos, xmlNodePtr currentNode, char *data)
 {
-  printf("1: %s\n",name);
-  printf("currentNode name = %s\n",currentNode->name);
   xmlNodePtr filePtr = xmlAddChild(currentNode,xmlNewNode(NULL,name));
-  printf("2: %s\n",name);
-  xmlNewChild(filePtr,NULL,"Time",infos.create_time);
-  xmlNewChild(filePtr,NULL,"Mode",&infos.mode);
-  xmlNewChild(filePtr,NULL,"Size",&infos.size);
-  xmlNewChild(filePtr,NULL,"Data",data);
-  printf("Fichier Ajouté\n");
+  xmlNewProp(filePtr,"Time",infos->create_time);
+  xmlNewProp(filePtr,"Mode",infos->mode);
+  xmlNewProp(filePtr,"Size",infos->size);
+  xmlNewProp(filePtr,"Data",data);
 }
 
 
 //Ajoute un répertoire au répertoire courant(currentNode) et retourne un pointeur sur le nouveau répertoire.
-xmlNodePtr addFolder(char *folderName, xmlNodePtr currentNode)
+xmlNodePtr addFolder(char *folderName, struct file_info *infos, xmlNodePtr currentNode)
 {
-  return(xmlAddChild(currentNode,xmlNewNode(NULL,folderName)));
+  xmlNodePtr folderPtr = xmlAddChild(currentNode,xmlNewNode(NULL,folderName));
+  xmlNewProp(folderPtr,"Time",infos->create_time);
+  xmlNewProp(folderPtr,"Mode",infos->mode);
+  xmlNewProp(folderPtr,"Size",infos->size);
+  return folderPtr ;
 }
 /*
 xmlNodePtr getNode(char *name, xmlDocPtr doc)
@@ -52,24 +52,25 @@ xmlNodePtr parcoursNode(xmlNodePtr a_node, char *name)
 void printXml(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = NULL;
+    char indentation[100]= "";
     
     rootNode = xmlDocGetRootElement(doc); //récupère la node root
-    printf("ROOT = %s\n", rootNode->name);
-    printElements(rootNode);
+    printf("Archive : \n");
+    printf("---------\n");
+    printElements(rootNode,indentation);
+    printf("\n");
 
     xmlCleanupParser();
 }
 
-void printElements(xmlNodePtr  a_node)
+void printElements(xmlNodePtr a_node, char *indentation) 
 {
+  indentation = strcat(indentation,"| ");
     xmlNodePtr currentNode = NULL;
-    printf("currentNode = %s\n",a_node->name);
     for (currentNode = a_node; currentNode; currentNode = currentNode->next) 
       {
-	printf("Name: %s\n", currentNode->name);
-	printf("Content = %s\n",currentNode->content);
+	printf("%s%s \n", indentation, currentNode->name);
 	if(currentNode->children != NULL)
-	  printElements(currentNode->children);
+	  printElements(currentNode->children,indentation);
       }
-    printf("----------\n");
 }
