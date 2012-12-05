@@ -36,7 +36,6 @@ struct dir_info
 	ushort mode;			// convertible en Char* via la fonction mode_view(mode) dans out.h
 };
 
-xmlDocPtr doc;
 
 
 #endif /* GLOBAL_H_ */
