@@ -13,10 +13,12 @@
 #include "xml_creator.h"
 
 int main( int argc, char* argv[] )
-{	
+{
+	struct file_info fi = get_file_info("objects.mk");
+	get_data(&fi);
 	doc = xmlNewDoc("1.0");
 	doctest = xmlNewDoc("1.0");
-	struct file_info fi = get_file_info("Test");
+
 	//afficher_file(&fi);
 	//create_directory(&fi);
 

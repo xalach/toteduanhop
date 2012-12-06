@@ -127,15 +127,14 @@ void read_files(int nb_files, char * files[])
 
 char * get_data(struct file_info * file)
 {
-	/*long s = ntohl(atoi(file->size));
-	FILE * fr = fopen(file->path, "r");
-	char * data;
-	fgets(data, s, fr);
-	//printf("data = %s\n", data);
-		//perror("erreur dans la récupération des donnés");
+	long s = ntohl(atoi(file->size));
+	FILE * fr = fopen(file->name, "r");
+	if (fr == NULL)
+		afficher_erreur(file->name);
+	char * data = malloc(s);
+	fread(data, sizeof(data), 1, fr);
 	fclose(fr);
-	return data;*/
-	return "";
+	return data;
 }
 
 int is_more_recent(char * path1, char * path2)

@@ -5,7 +5,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <utime.h>
- #include <errno.h>
+#include <errno.h>
+#include <fcntl.h>
 
 #include "out.h"
 #include "xml_creator.h"
@@ -28,11 +29,32 @@ void afficher_file(struct file_info * file)
 	printf("**********************\n", file->name);
 }
 
+void afficher_erreur(char * info)
+{
+	perror(info);
+	exit(1);
+}
+
+
 void create_file(struct file_info * file)
 {
+	mode_t fmod = ntohs(atoi(&file->mode));
+	int fd = open(file->name, O_WRONLY | O_CREAT, fmod);
+	if (fd < 0 )
+		afficher_erreur(file->name);
 
+	FILE * fw = fdopen(fd, "w");
+	if (fw == NULL)
+		afficher_erreur(file->name);
+	long fsize = ntohl(atol(&file->size));
+	fwrite(get_data_tar_file(file->name),fsize, fsize, fw);
 
-
+	struct utimbuf chgtm;
+	chgtm.modtime = ntohl(atoi(&file->create_time));
+	if ( utime(file->name, &chgtm) != 0 )
+		afficher_erreur(file->name);
+	printf("fichier créer\n");
+	fclose(fw);
 }
 
 void create_directory(struct file_info * dir)
@@ -40,20 +62,12 @@ void create_directory(struct file_info * dir)
 	mode_t dirmod = ntohs(atoi(&dir->mode));
 
 	if ( mkdir("test", NULL) != 0 )
-	{
-		printf("erreur dans la creation dossier\n");
-		if(errno == EEXIST)
-			printf("le nom existe deja\n");
-	}
-	/*
-	 * si le dossier existe dejà
-	 * 	 chmod(dir->path, dirmod);
-	 */
+		afficher_erreur(dir->name);
 
 	struct utimbuf chgtm;
 	chgtm.modtime = ntohl(atoi(&dir->create_time));
 	if ( utime(dir->name, NULL) != 0 )
-		printf("erreur dans le changement de date");
+		afficher_erreur(dir->name);
 	printf("dossier créer\n");
 }
 
@@ -93,10 +107,10 @@ void create_tar_files(char * tarfile)
 	   int i=0;
 	   while ( i < n)
 	   {
-		   mode_t mf = ntohs(atoi(&flist[i]->mode));
-		   if (S_ISREG(mf))
+			mode_t mf = ntohs(atoi(&flist[i]->mode));
+			if (S_ISREG(mf))
 			{
-			   create_file(flist[i]);
+				create_file(flist[i]);
 			}
 			if (S_ISDIR (mf))
 			{
