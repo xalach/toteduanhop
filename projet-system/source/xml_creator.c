@@ -58,27 +58,44 @@ void printXml()
     rootNode = xmlDocGetRootElement(doc); //récupère la node root
     printf("Archive : \n");
     printf("---------\n");
-    printElements(rootNode,indentation);
+    printElements(rootNode,indentation,0);
     printf("\n");
 
     xmlCleanupParser();
 }
 
-void printElements(xmlNodePtr a_node, char *indentation) 
+void printElements(xmlNodePtr a_node, char *indentation, int i) 
 {
   indentation = strcat(indentation,"| ");
+  int j;
     xmlNodePtr currentNode = NULL;
-    for (currentNode = a_node; currentNode; currentNode = currentNode->next) 
+    if(a_node->children != NULL) //C'est un répertoire
       {
-	printf("%s%s \n", indentation, currentNode->name);
-	if(currentNode->children != NULL)
-	  printElements(currentNode->children,indentation);
+	for (currentNode = a_node->children; currentNode; currentNode = currentNode->next) 
+	  {
+	    printf("%s%s \n", indentation, currentNode->name);
+	    if(currentNode->children != NULL)
+	      {
+		printElements(currentNode->children,indentation,i);
+	      }
+	  }
+      }
+    else
+      {
+	printf("%s%s \n", indentation, a_node->name);
       }
 }
 
 int tar_root_files(struct file_info ** files)
 {
-	return 0;
+  xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+  printf("%s\n",rootNode->name);
+  xmlNodePtr currentNode = NULL;
+  for(currentNode = rootNode->children ; currentNode ; currentNode = currentNode->next)
+    {
+      if(xmlGetProp(currentNode,"Data") != NULL)
+	printf("%s\n",xmlGetProp(currentNode, "Data"));
+    }
 }
 
 int tar_folder_files(char * folder, struct file_info ** files)
@@ -88,7 +105,22 @@ int tar_folder_files(char * folder, struct file_info ** files)
 
 void open_tar(char * tarfile)
 {
+  doc = xmlParseFile(tarfile);
+	
+  if (doc == NULL ) 
+    {
+      fprintf(stderr,"Document not parsed successfully. \n");
+      return;
+    }
 
+  xmlNodePtr cur = xmlDocGetRootElement(doc);
+	
+  if (cur == NULL) 
+    {
+      fprintf(stderr,"empty document\n");
+      xmlFreeDoc(doc);
+      return;
+    }
 }
 
 char * get_data_tar_file(char * file)

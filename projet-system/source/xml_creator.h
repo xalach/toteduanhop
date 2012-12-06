@@ -10,7 +10,7 @@ xmlNodePtr addFolder(char *folderName, struct file_info *infos, xmlNodePtr curre
 
 void printXml();
 
-void printElements(xmlNodePtr a_node, char *indentation);
+void printElements(xmlNodePtr a_node, char *indentation,int i);
 
 /***************************************************
  * Fonction à faire pour Desarchiver
