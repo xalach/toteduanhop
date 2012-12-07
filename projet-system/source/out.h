@@ -4,10 +4,9 @@
 #include "global.h"
 
 void write_verbose(char * message);
-
 void afficher_file(struct file_info * file);
-
 void afficher_erreur(char * info);
+char * default_tar_name();
 
 // créer un fichier à partir d'un file info
 void create_file(struct file_info * file);

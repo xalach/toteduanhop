@@ -11,7 +11,7 @@
 
 const char * right_values[8];
 
-char* tar_path;				// chemin courant du logiciel
+char * tar_path;				// emplacement du tar à enregistrer
 int verbose;				// booléen pour activité la verbose du logiciel
 
 xmlDocPtr doc;

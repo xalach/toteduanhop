@@ -35,6 +35,15 @@ void afficher_erreur(char * info)
 	exit(1);
 }
 
+char * default_tar_name()
+{
+	time_t n = time(NULL);
+	struct tm * t = localtime(&n);
+	char date[33];
+	strftime(date, 3000, "Archive_%Y-%m-%d_%H:%M:%S.tarx", t);
+	return date;
+}
+
 
 void create_file(struct file_info * file)
 {
@@ -47,7 +56,7 @@ void create_file(struct file_info * file)
 	if (fw == NULL)
 		afficher_erreur(file->name);
 	long fsize = ntohl(atol(&file->size));
-	fwrite(get_data_tar_file(file->name),fsize, fsize, fw);
+	fwrite(get_data_tar_file(file->name),fsize-1, fsize, fw);
 
 	struct utimbuf chgtm;
 	chgtm.modtime = ntohl(atoi(&file->create_time));

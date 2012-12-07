@@ -32,10 +32,10 @@ struct file_info get_file_info(char * path)
 {
 
 	struct stat statfile;
-	stat(path, &statfile);
+	if ( stat(path, &statfile) == -1 )
+		afficher_erreur(path);
 
 	struct file_info newfile;
-
 	newfile.name = basename(path);
 	sprintf(&newfile.create_time, "%i", htonl(statfile.st_mtime));	// se compile mal depuis eclipse
 	sprintf(&newfile.mode, "%i", htons(statfile.st_mode));
@@ -44,68 +44,50 @@ struct file_info get_file_info(char * path)
 	return newfile;
 }
 
-void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter : xmlNodePtr ( repetoire courant )
+void get_files_directory(char * path, xmlNodePtr repcourant)
 {
-	//printf("\n dossier courant : %s\n", get_current_dir_name());
-	//printf("ouverture du dossier : %s \n", path);
+// Récupère un tableau contenant la liste des fichiers et dossiers
+// celon un ordre alphabétique pour retier "." et ".."
+	struct dirent **flist;
+	struct stat statfile;
+	int n;
 
-// UNE AUTRE APPROCHE POUR PARCOURIR UN DOSSIER
-// 		plus haut niveau mais retire bien le "." et le ".."
-//		un tri alphabetique permet de les exclure
-//
-//		pour le parcours recursif : deux solutions
-   struct dirent **namelist;
-   struct stat statfile;
-   int n;
-
-   n = scandir(path, &namelist, 0, alphasort);
-   if (n < 0)
-	   perror("scandir");
-   else
-   {
-	   int i = 2;
-	   chdir(path);
-	   while ( i < n)
-	   {
-		   char * fname = namelist[i]->d_name;
+	n = scandir(path, &flist, 0, alphasort);
+	if (n > 0)
+	{
+// changement de répétoire pour récupére fichiers et dossiers
+		chdir(path);
+		int i = 2;
+		while ( i < n)
+		{
+		   char * fname = flist[i]->d_name;
 		   if( stat(fname, &statfile) == 0)
 		   {
-			   if (S_ISDIR (statfile.st_mode))
-				{
-					///printf("   * sous dossier : %s - \n", fname);
-				   struct file_info fi = get_file_info(fname);
-				   afficher_file(&fi);
-				   //get_files_directory(fname, addFolder(fname, repcourant));
-					//get_files_directory(fname, addFolder(fname, fi, repcourant));
-
-				}
-				else //if (S_ISREG(statfile.st_mode))
-				{
-					//printf("   - fichier : %s -\n", fname);
-					struct file_info fi = get_file_info(fname);
-					afficher_file(&fi);
-					//addFile(fname, fi, repcourant, "TOTO"); //get_data(file[i]);
-				}
+				struct file_info fi = get_file_info(fname);
+				if (S_ISDIR (statfile.st_mode))
+					get_files_directory(fname, addFolder(fname, &fi, repcourant));
+				else if (S_ISREG(statfile.st_mode))
+					addFile(fname, &fi, repcourant, get_data(&fi));
 		   }
 		   else
-			   perror(fname);
+			   afficher_erreur(fname);
 
-		   free(namelist[i]);
+		   free(flist[i]);
 		   i++;
 	   }
-	   free(namelist);
+	   free(flist);
 	   chdir("..");
+// retour au répértoir précédent
    }
 
 }
 
 
 // lis tous les fichiers passé en parametre par l'utilisateur
-// lis recursivement les dossiers
+// appel la lecture recursif lors d'un dossier
 void read_files(int nb_files, char * files[]) 
 {
-  
-  xmlNodePtr repcourant = createXml(".");
+	xmlNodePtr repcourant = createXml(".");
 
 	struct stat statfile;
 	int i;
@@ -132,7 +114,7 @@ char * get_data(struct file_info * file)
 	if (fr == NULL)
 		afficher_erreur(file->name);
 	char * data = malloc(s);
-	fread(data, sizeof(data), 1, fr);
+	fread(data, s-1, 1, fr);
 	fclose(fr);
 	return data;
 }
