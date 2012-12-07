@@ -7,7 +7,6 @@
 xmlNodePtr createXml(char *rootFolder) //Créer le document xml(!= d'un fichier) et retourne un pointeur sur le répertoire racine de l'archive
 {
   xmlNodePtr nodePtr = xmlNewNode(NULL,rootFolder);
-  // doc = xmlNewDoc("1.0"); // à garder pour l'affichage et l'enregistrement du xml
   xmlDocSetRootElement(doc, nodePtr);
   return (nodePtr);
 }
@@ -16,6 +15,7 @@ xmlNodePtr createXml(char *rootFolder) //Créer le document xml(!= d'un fichier)
 //Ajoute un fichier au répertoire courant(currentNode) avec les attribut de file_info correspondants.
 void addFile(char *name, struct file_info *infos, xmlNodePtr currentNode, char *data)
 {
+  printf("ADD fichier %s\n",name);
   xmlNodePtr filePtr = xmlAddChild(currentNode,xmlNewNode(NULL,name));
   xmlNewProp(filePtr,"Time",infos->create_time);
   xmlNewProp(filePtr,"Mode",infos->mode);

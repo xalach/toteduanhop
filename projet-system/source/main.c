@@ -17,14 +17,21 @@ int main( int argc, char* argv[] )
 
 	tar_path = default_tar_name();
 	printf("tar name = %s\n",tar_path);
-	//doctest = xmlNewDoc("1.0");
 	struct file_info fi = get_file_info("test.txt");
 
 	doc = xmlNewDoc("1.0");
 	xmlNodePtr rootNode = createXml(".");
 	xmlNodePtr mynode = rootNode ;
 	
-	addFile("test.txt", &fi, mynode, get_data(&fi));
+	addFile("rootFile", &fi, mynode, "donneRoot");
+	mynode = addFolder("folder1",&fi, mynode);
+	addFile("testFile1", &fi, mynode, "donne1");
+	addFile("testFile2", &fi, mynode, "donne2");
+	addFile("testFile3", &fi, mynode, "donne3");
+	mynode = addFolder("folder2",&fi,rootNode);
+	addFile("testFile4", &fi, mynode, "donne4");
+	addFile("testFile5", &fi, mynode, "donne5");
+	
 	//open_tar("test.xml");
 	printXml();
 	xmlSaveFormatFileEnc("toto.tar",doc,"utf-8",1);
