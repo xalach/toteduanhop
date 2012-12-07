@@ -7,9 +7,15 @@ void write_verbose(char * message);
 
 void afficher_file(struct file_info * file);
 
-void create_file(struct file_info * file);
+void afficher_erreur(char * info);
 
+// créer un fichier à partir d'un file info
+void create_file(struct file_info * file);
+// créer un dossier à partir d'un file info
 void create_directory(struct file_info * dir);
+
+void create_folder_files(char * dirpath);
+void create_tar_files(char * tarfile);
 
 // MEMO
 /*

@@ -35,9 +35,7 @@ struct file_info get_file_info(char * path)
 	stat(path, &statfile);
 
 	struct file_info newfile;
-	//newfile = (struct file_info *)malloc(sizeof(struct file_info));
 
-	newfile.path = realpath(path,NULL);
 	newfile.name = basename(path);
 	sprintf(&newfile.create_time, "%i", htonl(statfile.st_mtime));	// se compile mal depuis eclipse
 	sprintf(&newfile.mode, "%i", htons(statfile.st_mode));
@@ -77,7 +75,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 					///printf("   * sous dossier : %s - \n", fname);
 				   struct file_info fi = get_file_info(fname);
 				   afficher_file(&fi);
-					get_files_directory(fname, addFolder(fname, repcourant));
+				   //get_files_directory(fname, addFolder(fname, repcourant));
 					//get_files_directory(fname, addFolder(fname, fi, repcourant));
 
 				}
@@ -86,7 +84,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 					//printf("   - fichier : %s -\n", fname);
 					struct file_info fi = get_file_info(fname);
 					afficher_file(&fi);
-					addFile(fname, fi, repcourant, "TOTO"); //get_data(file[i]);
+					//addFile(fname, fi, repcourant, "TOTO"); //get_data(file[i]);
 				}
 		   }
 		   else
@@ -106,7 +104,8 @@ void get_files_directory(char * path, xmlNodePtr repcourant)	  // add parameter 
 // lis recursivement les dossiers
 void read_files(int nb_files, char * files[]) 
 {
-	xmlNodePtr repcourant = createXml(".");
+  
+  xmlNodePtr repcourant = createXml(".");
 
 	struct stat statfile;
 	int i;
@@ -116,11 +115,11 @@ void read_files(int nb_files, char * files[])
 		if (S_ISREG(statfile.st_mode))
 		{
 			struct file_info fi = get_file_info(files[i]);
-			addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
+			//addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
 		}
 		if (S_ISDIR (statfile.st_mode))
 		{
-			addFolder("name", repcourant);
+		  //addFolder("name", repcourant);
 			get_files_directory(files[i], repcourant);
 		}
 	}
@@ -128,15 +127,14 @@ void read_files(int nb_files, char * files[])
 
 char * get_data(struct file_info * file)
 {
-	/*long s = ntohl(atoi(file->size));
-	FILE * fr = fopen(file->path, "r");
-	char * data;
-	fgets(data, s, fr);
-	//printf("data = %s\n", data);
-		//perror("erreur dans la récupération des donnés");
+	long s = ntohl(atoi(file->size));
+	FILE * fr = fopen(file->name, "r");
+	if (fr == NULL)
+		afficher_erreur(file->name);
+	char * data = malloc(s);
+	fread(data, sizeof(data), 1, fr);
 	fclose(fr);
-	return data;*/
-	return "";
+	return data;
 }
 
 int is_more_recent(char * path1, char * path2)

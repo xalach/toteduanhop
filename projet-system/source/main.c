@@ -13,21 +13,52 @@
 #include "xml_creator.h"
 
 int main( int argc, char* argv[] )
-{	
+<<<<<<< HEAD
+{
+	struct file_info fi = get_file_info("objects.mk");
+	get_data(&fi);
 	doc = xmlNewDoc("1.0");
-	/*struct file_info fi = get_file_info("Test");
-	afficher_file(&fi);
-	create_directory(&fi);*/
+	doctest = xmlNewDoc("1.0");
+
+=======
+{	
+	//doctest = xmlNewDoc("1.0");
+	struct file_info fi = get_file_info("Test");
+>>>>>>> 05d43fabc95ec4fb2f4fb5f8925837589cada9bb
+	//afficher_file(&fi);
+	//create_directory(&fi);
 
 	is_more_recent("read.o", "record.o");
 	is_more_recent("Test", "/home/arnaud");
 	is_more_recent("Test", "read.o");
 
-	xmlNodePtr mynode = createXml("unnom");
+
+<<<<<<< HEAD
+=======
+	doc = xmlNewDoc("1.0");
+	xmlNodePtr rootNode = createXml("unnom");
 	//get_files_directory("Test", mynode);
+	xmlNodePtr mynode = rootNode ;
+	
+	//get_files_directory("Test");
+>>>>>>> 971eb1939a95f286d79db6c3297199f428116ba1
 
+	
+	addFile("rootFile", &fi, mynode, "donneRoot");
+	mynode = addFolder("folder1",&fi, mynode);
+	addFile("testFile1", &fi, mynode, "donne1");
+	addFile("testFile2", &fi, mynode, "donne2");
+	addFile("testFile3", &fi, mynode, "donne3");
+	mynode = addFolder("folder2",&fi,rootNode);
+	addFile("testFile4", &fi, mynode, "donne4");
+	addFile("testFile5", &fi, mynode, "donne5");
+	//open_tar("test.xml");
+	tar_root_files(NULL);
+	printXml();
+	//xmlSaveFormatFileEnc("test.xml", doc, "utf-8", 1 );
+	
 
-		//struct file_info * fi = get_file_info("read.d");
+	//struct file_info * fi = get_file_info("read.d");
 		//afficher_file(fi);
 		//free(fi);
 
