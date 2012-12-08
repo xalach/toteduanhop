@@ -3,6 +3,7 @@
 #include <getopt.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #include <string.h>
 
@@ -16,7 +17,7 @@ int main( int argc, char* argv[] )
 {
 
 	tar_path = default_tar_name();
-	printf("tar name = %s\n",tar_path);
+	printf("%d : tar name = %s\n",strlen (tar_path), tar_path);
 	struct file_info fi = get_file_info("test.txt");
 
 	doc = xmlNewDoc("1.0");

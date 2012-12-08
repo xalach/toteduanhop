@@ -39,8 +39,9 @@ char * default_tar_name()
 {
 	time_t n = time(NULL);
 	struct tm * t = localtime(&n);
-	char date[33];
-	strftime(date, 3000, "Archive_%Y-%m-%d_%H:%M:%S.tarx", t);
+	char * date = malloc(sizeof(char)*33);
+	//char * date[132];			// marche pas et c'est inexplicable
+	strftime(date, 33, "Archive_%Y-%m-%d_%H-%M-%S.tarx", t);
 	return date;
 }
 
