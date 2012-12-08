@@ -1,14 +1,14 @@
-(defclass parallele-enumerateur (nary-relying-enumerator)
+(defclass parallele-enumerator (unaire-combinaison-enumerator)
   ())
 
 (defmethod next-element-p ((e parallel-enumerator))
   (every #’next-element-p
-	   (underlying-enumerators e)))
+	   (sous-enumerators e)))
 
 (defmethod next-element ((e parallel-enumerator))
   (loop
      for enumerator
-     in (underlying-enumerators e)
+     in (sous-enumerators e)
      collect (next-element enumerator)))
 
 ; des methodes à implémenter
