@@ -4,7 +4,7 @@
 
 xmlNodePtr createXml(char*rootFolder);
 
-void addFile(char *name,struct file_info *infos, xmlNodePtr currentNode,char *data);
+void addFile(char *name, struct file_info *infos, xmlNodePtr currentNode,char *data);
 
 xmlNodePtr addFolder(char *folderName, struct file_info *infos, xmlNodePtr currentNode);
 
@@ -21,7 +21,7 @@ int tar_root_files(struct file_info ** files);
 // 		- retourne la taille du tableau
 // --> comme fait la fonction scandir
 
-int tar_folder_files(char *pere,char * folder, struct file_info ** files);
+int tar_folder_files(char *pere, char * folder, struct file_info ** files);
 // 		-folder : le dossier à explorer
 // 		-files : tableau de structure file_info pour chaque fichiers et dossier du "folder"
 // 		- retourne la taille du tableau

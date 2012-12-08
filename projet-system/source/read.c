@@ -79,16 +79,18 @@ void get_files_directory(char * path, xmlNodePtr repcourant)
 	   chdir("..");
 // retour au répértoir précédent
    }
-
 }
 
 
 // lis tous les fichiers passé en parametre par l'utilisateur
 // appel la lecture recursif lors d'un dossier
-void read_files(int nb_files, char * files[]) 
+void read_files(char * tarpath, int nb_files, char * files[])
 {
-
-	xmlNodePtr repcourant = createXml(tar_path);
+	xmlNodePtr repcourant;
+	if ( tarpath != NULL)
+		repcourant = createXml(basename(tarpath));
+	else
+		repcourant = createXml("./");
 	struct stat statfile;
 	int i;
 	for(i=0; i<nb_files; i++)
@@ -97,7 +99,7 @@ void read_files(int nb_files, char * files[])
 		{
 			struct file_info fi = get_file_info(files[i]);
 			if (S_ISREG(statfile.st_mode))
-				addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
+				addFile(basename(files[i]),&fi , repcourant, get_data(files[i]));
 			else if (S_ISDIR (statfile.st_mode))
 				get_files_directory(basename(files[i]), addFolder(basename(files[i]), &fi, repcourant));
 		}
@@ -118,10 +120,51 @@ char * get_data(struct file_info * file)
 	return data;
 }
 
-void add_files(char * tarpath, int nb_files, files[])
+void add_files_directory(char * path, xmlNodePtr repcourant)
+{
+// Récupère un tableau contenant la liste des fichiers et dossiers
+// celon un ordre alphabétique pour retier "." et ".."
+	struct dirent **flist;
+	struct stat statfile;
+	int n;
+
+	n = scandir(path, &flist, 0, alphasort);
+	if (n > 0)
+	{
+// changement de répétoire pour récupére fichiers et dossiers
+		chdir(path);
+		int i = 2;
+		while ( i < n)
+		{
+		   char * fname = flist[i]->d_name;
+		  /* if( stat(fname, &statfile) == 0)
+		   {
+				struct file_info fi = get_file_info(fname);
+				if(file_exist(fname) == 0 ||
+						( update == 1 && is_more_recent(&fi,get_info_tar(fname)) ) )
+				{
+					if (S_ISDIR (statfile.st_mode))
+						add_files_directory(fname, addFolder(fname, &fi, repcourant));
+					else if (S_ISREG(statfile.st_mode))
+						addFile(fname, &fi, repcourant, get_data(&fi));
+				}
+		   }
+		   else
+			   afficher_erreur(fname);
+
+		   free(flist[i]);*/
+		   i++;
+	   }
+	   free(flist);
+	   chdir("..");
+// retour au répértoir précédent
+   }
+}
+
+void add_files(char * tarpath, int nb_files, char * files[])
 {
 	open_tar(tarpath);
-	xmlNodePtr repcourant = createXml(tarpath);
+	xmlNodePtr repcourant = createXml(basename(tarpath));
 	struct stat statfile;
 	int i;
 	for(i=0; i<nb_files; i++)
@@ -129,21 +172,16 @@ void add_files(char * tarpath, int nb_files, files[])
 		if( stat(files[i], &statfile) == 0)
 		{
 			struct file_info fi = get_file_info(files[i]);
-	// si le fichier à ajouter n'est pas déjà dans l'archive
-			if(file_exist(files[i]) == 0 ||
-					( update == 1 && is_more_recent())
+// si le fichier à ajouter n'est pas déjà dans l'archive
+// ou l'option update est présent et il s'ajoute seulement si plus récent
+		/*	if(file_exist(files[i]) == 0 ||
+					( update == 1 && is_more_recent(&fi,get_info_tar(files[i])) ) )
 			{
 				if (S_ISREG(statfile.st_mode))
-				{
-
 					addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
-				}
 				if (S_ISDIR (statfile.st_mode))
-				{
-					addFolder("name", repcourant);
-					add_files_directory(files[i], repcourant);
-				}
-			}
+					add_files_directory(basename(files[i]), addFolder(basename(files[i]), &fi, repcourant));
+			}*/
 		}
 		else
 			afficher_erreur(files[i]);
@@ -152,8 +190,8 @@ void add_files(char * tarpath, int nb_files, files[])
 
 int is_more_recent(struct file_info * file1, struct file_info * file2)
 {
-	time_t f1 = file1->st_mtime;
-	time_t f2 = file2->st_mtime;
-
-	return f1-f2 > 0 ? 1 : 0;
+	//time_t f1 = ntohl(atoi(&file1->create_time));
+	//time_t f2 = ntohl(atoi(&file2->create_time));
+	//return f1-f2 > 0 ? 1 : 0;
+	return 0;
 }

@@ -4,7 +4,6 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../global.c \
 ../main.c \
 ../out.c \
 ../read.c \
@@ -12,7 +11,6 @@ C_SRCS += \
 ../xml_creator.c 
 
 OBJS += \
-./global.o \
 ./main.o \
 ./out.o \
 ./read.o \
@@ -20,7 +18,6 @@ OBJS += \
 ./xml_creator.o 
 
 C_DEPS += \
-./global.d \
 ./main.d \
 ./out.d \
 ./read.d \

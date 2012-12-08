@@ -87,11 +87,11 @@ void create_directory(struct file_info * dir)
 	printf("dossier créer\n");
 }
 
-void create_folder_files(char * dirpath)
+void create_folder_files(char * parent, char * dirpath)
 {
 	struct file_info **flist;
 	int n;
-	n = tar_folder_files(dirpath, &flist);
+	n = tar_folder_files(parent, dirpath, &flist);
 	if ( n > 0 )
 	{
 	   chdir(dirpath);
@@ -106,7 +106,7 @@ void create_folder_files(char * dirpath)
 			if (S_ISDIR (mf))
 			{
 				create_directory(flist[i]);
-				create_folder_files(flist[i]->name);
+				create_folder_files(dirpath, flist[i]->name);
 			}
 	   }
 	   chdir("..");
@@ -114,9 +114,9 @@ void create_folder_files(char * dirpath)
 	free(flist);
 }
 
-void create_tar_files(char * tarfile)
+void create_tar_files(char * tarpath)
 {
-	open_tar(tarfile);
+	open_tar(tarpath);
 	struct file_info **flist;
 	int n = tar_root_files(&flist);
 	if ( n > 0 )
@@ -132,7 +132,7 @@ void create_tar_files(char * tarfile)
 			if (S_ISDIR (mf))
 			{
 				create_directory(flist[i]);
-				create_folder_files(flist[i]->name);
+				create_folder_files(basename(tarpath), flist[i]->name);
 			}
 	   }
 	}
