@@ -99,7 +99,7 @@ void read_files(char * tarpath, int nb_files, char * files[])
 		{
 			struct file_info fi = get_file_info(files[i]);
 			if (S_ISREG(statfile.st_mode))
-				addFile(basename(files[i]),&fi , repcourant, get_data(files[i]));
+				addFile(basename(files[i]),&fi , repcourant, get_data(&fi));
 			else if (S_ISDIR (statfile.st_mode))
 				get_files_directory(basename(files[i]), addFolder(basename(files[i]), &fi, repcourant));
 		}
@@ -111,9 +111,10 @@ void read_files(char * tarpath, int nb_files, char * files[])
 char * get_data(struct file_info * file)
 {
 	long s = ntohl(atoi(file->size));
+	printf("fichier à récup : %s\n", file->name);
 	FILE * fr = fopen(file->name, "r");
-	if (fr == NULL)
-		afficher_erreur(file->name);
+	//if (fr == NULL)
+		//afficher_erreur(file->name);
 	char * data = malloc(s);
 	fread(data, s-1, 1, fr);
 	fclose(fr);

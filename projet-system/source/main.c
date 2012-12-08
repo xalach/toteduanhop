@@ -15,15 +15,18 @@
 
 int main( int argc, char* argv[] )
 {
+	doc = xmlNewDoc("1.0");
 	verbose = update = 0;
 	char * currentdirectory = realpath(".",NULL);
 	char * destpath; // chemin de destination du fichier tar
+	struct file_info fi = get_file_info("help.txt");
+	afficher_file(&fi);
 /*
 	tar_path = default_tar_name();
 	printf("%d : tar name = %s\n",strlen (tar_path), tar_path);
-	struct file_info fi = get_file_info("test.txt");
 
-	doc = xmlNewDoc("1.0");
+
+
 	xmlNodePtr rootNode = createXml(".");
 	xmlNodePtr mynode = rootNode ;
 	
