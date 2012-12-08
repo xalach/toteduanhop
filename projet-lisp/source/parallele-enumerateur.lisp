@@ -1,4 +1,4 @@
-(defclass parallele-enumerator (unaire-combinaison-enumerator)
+(defclass parallele-enumerator (nnaire-combinaison-enumerator)
   ())
 
 (defmethod next-element-p ((e parallel-enumerator))
