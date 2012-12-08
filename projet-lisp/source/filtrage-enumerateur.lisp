@@ -5,7 +5,7 @@
   (loop
      while (trouve-depend (depend e))
      until (funcall (fun e) (objet-depend (depend e)))
-    do (set-memo-res (enum e))))
+    do (set-memo-result (depend e))))
 
 (defmethod init-enumerator :after ((e filtrage-enumerateur))
   (skip-to-next e))
@@ -16,7 +16,7 @@
 (defmethod next-element ((e filtrage-enumerator))
   (prog1
       (obejet-depend (depend e))
-    (set-memo-res (depend e))
+    (set-memo-result (depend e))
     (skip-to-next e)))
 
 (defmethod make-filtrage-enumerateur ((e abstract-enumerator) filter-fun)
