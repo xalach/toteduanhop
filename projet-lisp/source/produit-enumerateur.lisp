@@ -1,5 +1,5 @@
-(defclass produit-enumerateur
-      (nary-relying-enumerator fun-mixin)
+(defclass produit-enumerator
+      (unaire-combinaison-enumerator fun-mixin)
   ())
 
 (defmethod make-produit-enumerateur
