@@ -21,28 +21,6 @@ int main( int argc, char* argv[] )
 	char * destpath; // chemin de destination du fichier tar
 	struct file_info fi = get_file_info("help.txt");
 	afficher_file(&fi);
-/*
-	tar_path = default_tar_name();
-	printf("%d : tar name = %s\n",strlen (tar_path), tar_path);
-
-
-
-	xmlNodePtr rootNode = createXml(".");
-	xmlNodePtr mynode = rootNode ;
-	
-	addFile("rootFile", &fi, mynode, "donneRoot");
-	mynode = addFolder("folder1",&fi, mynode);
-	addFile("testFile1", &fi, mynode, "donne1");
-	addFile("testFile2", &fi, mynode, "donne2");
-	addFile("testFile3", &fi, mynode, "donne3");
-	mynode = addFolder("folder2",&fi,rootNode);
-	addFile("testFile4", &fi, mynode, "donne4");
-	addFile("testFile5", &fi, mynode, "donne5");
-	
-	//open_tar("test.xml");
-	printXml();
-	xmlSaveFormatFileEnc("toto.tar",doc,"utf-8",1);*/
-
 
 // Gestion des options
 	extern int optind, optopt;
@@ -71,12 +49,20 @@ int main( int argc, char* argv[] )
 
 		// Creation archive
 				case 'c':
+				{
 					flist = &argv[optind-1];
 					nbfile = argc - optind +1;
 					read_files(destpath, nbfile, flist);
-					xmlSaveFormatFileEnc("toto.tar",doc,"utf-8",1);
-					//xmlDocDump(File* f, doc);
+					if(destpath != NULL)
+						xmlSaveFormatFileEnc(destpath,doc,"utf-8",1);
+					else
+					{
+						FILE * fa = fdopen(1, "w");
+						xmlDocDump(fa, doc);
+					}
+					return 0;
 					break;
+				}
 
 		// Affichage archive
 				case 't':
@@ -137,7 +123,6 @@ int main( int argc, char* argv[] )
 					break;
 			}
 		}
-		write_verbose("ceci est un test");
 
 	}
 	return 0;

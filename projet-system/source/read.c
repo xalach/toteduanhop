@@ -86,7 +86,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)
 // appel la lecture recursif lors d'un dossier
 void read_files(char * tarpath, int nb_files, char * files[])
 {
-	xmlNodePtr repcourant = createXml("./");
+	xmlNodePtr repcourant = createXml("root");
 	struct stat statfile;
 	int i;
 	for(i=0; i<nb_files; i++)

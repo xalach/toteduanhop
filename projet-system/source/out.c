@@ -124,10 +124,10 @@ void create_tar_files(char * tarpath)
 	   int i=0;
 	   while ( i < n)
 	   {
-			mode_t mf = ntohs(atoi(&flist[i]->mode));
+			mode_t mf = ntohs(atoi(flist[i]->mode));
 			if (S_ISREG(mf))
 			{
-				create_file("./", flist[i]);
+				create_file("root", flist[i]);
 			}
 			if (S_ISDIR (mf))
 			{

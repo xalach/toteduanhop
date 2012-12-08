@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<./>
+<root>
   <help.txt Time="2070856528" Mode="46209" Size="-670957568" Data="SYNOPSIS&#10;     tar [-v] [-z] [-f [outfile.tar]] -c files ...&#10;     tar [-v] -t file.tar&#10;     tar [-v] -x file.tar [pathToExtract]&#10;     tar [-v] [-u] -r file.tar filesToAdd ...&#10;     tar [-v] -d file.tar fileToRemove&#10;&#10;DESCRIPTION&#10;     Tar regroupe des fichiers et dossiers dans une seul archive&#10;&#10;FUNCTION LETTERS&#10;     Main operation mode:&#10;&#10;     -h, afficher l'aide&#10;     &#10;     -v, rend le programme verbeux&#10;&#10;     -c, créer une nouvelle archive à partir d'une liste de fichier&#10;&#10;     -d, nd differences between archive and file system&#10;&#10;     --delete&#10;           delete from the archive (not on mag tapes!)&#10;&#10;     -r, --append&#10;           append files to the end of an archive&#10;&#10;     -t, --list&#10;           list the contents of an archive"/>
-</./>
+</root>
