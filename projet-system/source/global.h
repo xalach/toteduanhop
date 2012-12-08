@@ -8,6 +8,7 @@
 #include <libxml/xmlIO.h>
 #include <libxml/xinclude.h>
 #include <libxml/tree.h>
+#include <libxml/xpath.h>
 
 int verbose;				// booléen pour activité la verbose du logiciel
 int update;					// booléen pour précisé si l'archive doit être mis à jours

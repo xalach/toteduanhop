@@ -71,6 +71,7 @@ int main( int argc, char* argv[] )
 					flist = &argv[optind-1];
 					nbfile = argc - optind +1;
 					read_files(destpath, nbfile, flist);
+					xmlSaveFormatFileEnc("toto.tar",doc,"utf-8",1);
 					//xmlDocDump(File* f, doc);
 					break;
 
