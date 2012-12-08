@@ -51,7 +51,7 @@ char * default_tar_name()
 }
 
 
-void create_file(struct file_info * file)
+void create_file(char * parent, struct file_info * file)
 {
 	mode_t fmod = ntohs(atoi(&file->mode));
 	int fd = open(file->name, O_WRONLY | O_CREAT, fmod);
@@ -62,7 +62,7 @@ void create_file(struct file_info * file)
 	if (fw == NULL)
 		afficher_erreur(file->name);
 	long fsize = ntohl(atol(&file->size));
-	fwrite(get_data_tar_file(file->name),fsize-1, fsize, fw);
+	fwrite(get_data_tar_file(parent, file->name),fsize-1, fsize, fw);
 
 	struct utimbuf chgtm;
 	chgtm.modtime = ntohl(atoi(&file->create_time));
@@ -101,7 +101,7 @@ void create_folder_files(char * parent, char * dirpath)
 		   mode_t mf = ntohs(atoi(&flist[i]->mode));
 		   if (S_ISREG(mf))
 			{
-			   create_file(flist[i]);
+			   create_file(parent, flist[i]);
 			}
 			if (S_ISDIR (mf))
 			{
@@ -127,7 +127,7 @@ void create_tar_files(char * tarpath)
 			mode_t mf = ntohs(atoi(&flist[i]->mode));
 			if (S_ISREG(mf))
 			{
-				create_file(flist[i]);
+				create_file("./", flist[i]);
 			}
 			if (S_ISDIR (mf))
 			{

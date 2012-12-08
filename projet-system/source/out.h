@@ -10,7 +10,7 @@ void afficher_help();
 char * default_tar_name();
 
 // créer un fichier à partir d'un file info
-void create_file(struct file_info * file);
+void create_file(char * parent, struct file_info * file);
 // créer un dossier à partir d'un file info
 void create_directory(struct file_info * dir);
 

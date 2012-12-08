@@ -33,7 +33,7 @@ int exist_at_root(char *);
 
 void delete_file(char *pere, char *name);
 
-char * get_data_tar_file(char * file);
+char * get_data_tar_file(char *pere, char * file);
 // 		- retourne les donné du fichier "file"
 
 // 	limite on peut retiré la fonction tar_root_files si tu me donne le nom du root

@@ -86,11 +86,7 @@ void get_files_directory(char * path, xmlNodePtr repcourant)
 // appel la lecture recursif lors d'un dossier
 void read_files(char * tarpath, int nb_files, char * files[])
 {
-	xmlNodePtr repcourant;
-	if ( tarpath != NULL)
-		repcourant = createXml(basename(tarpath));
-	else
-		repcourant = createXml("./");
+	xmlNodePtr repcourant = createXml("./");
 	struct stat statfile;
 	int i;
 	for(i=0; i<nb_files; i++)
@@ -98,6 +94,7 @@ void read_files(char * tarpath, int nb_files, char * files[])
 		if( stat(files[i], &statfile) == 0)
 		{
 			struct file_info fi = get_file_info(files[i]);
+			printf("basename : %s\n", basename(files[i]));
 			if (S_ISREG(statfile.st_mode))
 				addFile(basename(files[i]),&fi , repcourant, get_data(&fi));
 			else if (S_ISDIR (statfile.st_mode))
