@@ -46,7 +46,7 @@ int main( int argc, char* argv[] )
 // un ":" signifie que le paramêtre prend une valeur après
 	if (argc > 1)
 	{
-		while( (opt = getopt(argc, argv, "hvc:tr:u:x:f:zd:sm:")) != -1 )
+		while( (opt = getopt(argc, argv, "hvc:tr:u:x:fzd:sm:")) != -1 )
 		{
 			printf( "%c - %d - %d : %s\n", opt, optind, optopt, optarg);
 			switch(opt)
