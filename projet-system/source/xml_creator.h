@@ -4,7 +4,7 @@
 
 xmlNodePtr createXml(char*rootFolder);
 
-void addFile(char *name,struct file_info *infos, xmlNodePtr currentNode,char *data);
+void addFile(char *name, struct file_info *infos, xmlNodePtr currentNode,char *data);
 
 xmlNodePtr addFolder(char *folderName, struct file_info *infos, xmlNodePtr currentNode);
 

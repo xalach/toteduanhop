@@ -9,15 +9,10 @@
 #include <libxml/xinclude.h>
 #include <libxml/tree.h>
 
-const char * right_values[8];
-
-char * tar_path;				// emplacement du tar à enregistrer
 int verbose;				// booléen pour activité la verbose du logiciel
 int update;					// booléen pour précisé si l'archive doit être mis à jours
 
-
 xmlDocPtr doc;
-xmlDocPtr doctest;
 
 struct file_info
 {
@@ -26,7 +21,5 @@ struct file_info
 	char* mode[sizeof(mode_t)];				// converti en Char* via sprintf(%o)
 	char* size[sizeof(off_t)];				// à convertir avec htonl, convertir en long avec atoi() et ntohl()
 };
-
-
 
 #endif /* GLOBAL_H_ */

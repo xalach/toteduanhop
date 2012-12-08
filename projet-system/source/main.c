@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-
+#include <limits.h>
 #include <string.h>
 
 #include "record.h"
@@ -15,7 +15,10 @@
 
 int main( int argc, char* argv[] )
 {
-
+	verbose = update = 0;
+	char * currentdirectory = realpath(".",NULL);
+	char * destpath; // chemin de destination du fichier tar
+/*
 	tar_path = default_tar_name();
 	printf("%d : tar name = %s\n",strlen (tar_path), tar_path);
 	struct file_info fi = get_file_info("test.txt");
@@ -35,7 +38,7 @@ int main( int argc, char* argv[] )
 	
 	//open_tar("test.xml");
 	printXml();
-	xmlSaveFormatFileEnc("toto.tar",doc,"utf-8",1);
+	xmlSaveFormatFileEnc("toto.tar",doc,"utf-8",1);*/
 
 
 // Gestion des options
@@ -44,43 +47,82 @@ int main( int argc, char* argv[] )
 	int opt;
 // le string "hvc:tr:u:x:f:zd:sm:" représente les paramètre qu'on veut reconnaitre
 // un ":" signifie que le paramêtre prend une valeur après
+
+	printf("argc = %d\n", argc);
+
 	if (argc > 1)
 	{
-		while( (opt = getopt(argc, argv, "hvc:tr:u:x:fzd:sm:")) != -1 )
+		while( (opt = getopt(argc, argv, "hvc:tr:u:x:f::zd:sm:")) != -1 )
 		{
+			char ** flist;
+			int nbfile;
 			printf( "%c - %d - %d : %s\n", opt, optind, optopt, optarg);
 			switch(opt)
 			{
 				case 'h':
-					//afficher l'aide (présent dans un fichier)
+					afficher_help();
 					return 0;
 				case 'v':
 					verbose = 1;
 					break;
+
+		// Creation archive
 				case 'c':
-					//créer une archive tar avec les fichier dans "optarg" 
+					flist = &argv[optind-1];
+					nbfile = argc - optind +1;
+					read_files(destpath, nbfile, flist);
+					//xmlDocDump(File* f, doc);
 					break;
+
+		// Affichage archive
 				case 't':
-					//afficher l'archive
+					open_tar(optarg);
+					printXml();
+					return 0;
 					break;
+
+		// Ajouter fichiers à une archive
 				case 'r':
-					//add_tar(optarg);
+					flist = &argv[optind];
+					nbfile = argc - optind +2;
+					add_files(optarg, nbfile, flist);
 					break;
+
+		// Ajouter l'option update
 				case 'u':
-					//update_tar(optarg);
+						update = 1;
 					break;
+
+		// Extraire l'archive
 				case 'x':
-					//extract_tar(optarg);
+					nbfile = argc - optind +1;
+			// destination précisé ?
+					if ( nbfile > 1)
+						chdir(argv[optind]);
+					create_tar_files(optarg);
+					chdir(currentdirectory);
+					return 0;
 					break;
+
+		// Choisir un fichier de sortie
 				case 'f':
-					//add_file_tar(optar
+					if (optarg != NULL)
+						destpath = argv[optind-1];
+					else
+						destpath = default_tar_name();
 					break;
+
+		// Compression de l'archive
 				case 'z':
 					//compress_tar();
 					break;
+
+		// Supression d'un fichier
 				case 'd':
 					//delete_tar(optarg);
 					break;
+
+		// Retirer des "0" en trop
 				case 's':
 					//save_space();
 					break;

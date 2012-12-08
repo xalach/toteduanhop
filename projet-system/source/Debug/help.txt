@@ -3,7 +3,7 @@ SYNOPSIS
      tar [-v] -t file.tar
      tar [-v] -x file.tar [pathToExtract]
      tar [-v] [-u] -r file.tar filesToAdd ...
-     tar [-v] -
+     tar [-v] -d file.tar fileToRemove
 
 DESCRIPTION
      Tar regroupe des fichiers et dossiers dans une seul archive

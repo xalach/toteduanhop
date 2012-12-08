@@ -114,9 +114,9 @@ void create_folder_files(char * dirpath)
 	free(flist);
 }
 
-void create_tar_files(char * tarfile)
+void create_tar_files(char * tarpath)
 {
-	open_tar(tarfile);
+	open_tar(tarpath);
 	struct file_info **flist;
 	int n = tar_root_files(&flist);
 	if ( n > 0 )
