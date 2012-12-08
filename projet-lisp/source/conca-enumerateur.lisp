@@ -7,7 +7,7 @@
 (defmethod make-conca-enumerator ((e abstract-enumerator))
 	(init-enumerator
 		(make-instance
-		’append-enumerator
+		’conca-enumerator
 		:depend (copy-enumerator e))))
 
 (defmethod skip-to-next-non-null ((e conca-enumerator))
