@@ -1,48 +1,35 @@
-(defclass produit-enumerator
-      (unaire-combinaison-enumerator fun-mixin)
-  ())
+(defclass produit-enumerator (unaire-combinaison-enumerator fun-mixin)())
 
-(defmethod make-produit-enumerateur
-    (fun (enums (eql nil)))
+(defmethod make-produit-enumerator (fun (depends (eql nil)))
   (make-empty-enumerator))
 
-(defmethod make-produit-enumerateur
-    (fun (enums list))
-  (let ((v (map
-	    ’vector
-	     #’make-memo-enumerateur
-	       enums)))
-    (if (every #’enum-found v)
-	(make-instance
-	 ’produit-enumerateur
-	  :underlying-enumerators v
-	  :fun fun)
+(defmethod make-produit-enumerator (fun (depends list))
+  (let ((v (map ’vector #’make-memo-enumerator depends)))
+    (if (every #’trouve-depend v)
+	(make-instance ’produit-enumerateur :sous-enumerators v :fun fun)
 	(make-empty-enumerator))))
 
-(defmethod enum-i
-    ((e produit-enumerateur) (i integer))
-  (aref (underlying-enumerators e) i))
+(defmethod depend-i ((e produit-enumerator) (i integer))
+  (aref (sous-enumerators e) i))
 
-(defmethod next-element-p
-    ((e produit-enumerateur))
-  (enum-found (enum-i e 0)))
+(defmethod next-element-p ((e produit-enumerator))
+	(trouve-depend (depend-i e 0)))
 
-(defmethod next-element
-    ((e produit-enumerateur))
-  (let ((enums (underlying-enumerators e)))
+(defmethod next-element ((e produit-enumerator))
+  (let ((depends (sous-enumerators e)))
     (prog1
-	(apply
-	 (fun e)
-	 (map ’list
-	       (lambda (ei)
-		 (enum-object ei)) enums))
+			(apply
+	 			(fun e)
+	 			(map ’list
+	       	(lambda (ei)
+		 				(enum-object ei)) enums))
       (let ((index (1- (length enums))))
-	(set-memo-res (enum-i e index))
-	(loop 
-	  until (enum-found
-		 (enum-i e index))
-	  until (zerop index)
-	  do (init-enumerator
-	      (enum-i e index))
-	  do (set-memo-res
-	      (enum-i e (decf index))))))))
+				(set-memo-result (depend-i e index))
+				(loop 
+	  			until (trouve-depend
+		 						(depend-i e index))
+	  			until (zerop index)
+	  			do (init-enumerator
+	      		(depend-i e index))
+	  			do (set-memo-result
+	      		(depend-i e (decf index))))))))
