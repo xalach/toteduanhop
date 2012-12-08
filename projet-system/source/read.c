@@ -87,23 +87,22 @@ void get_files_directory(char * path, xmlNodePtr repcourant)
 // appel la lecture recursif lors d'un dossier
 void read_files(int nb_files, char * files[]) 
 {
-	xmlNodePtr repcourant = createXml(".");
 
+	xmlNodePtr repcourant = createXml(tar_path);
 	struct stat statfile;
 	int i;
 	for(i=0; i<nb_files; i++)
 	{
-		stat(files[i], &statfile);
-		if (S_ISREG(statfile.st_mode))
+		if( stat(files[i], &statfile) == 0)
 		{
 			struct file_info fi = get_file_info(files[i]);
-			//addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
+			if (S_ISREG(statfile.st_mode))
+				addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
+			else if (S_ISDIR (statfile.st_mode))
+				get_files_directory(basename(files[i]), addFolder(basename(files[i]), &fi, repcourant));
 		}
-		if (S_ISDIR (statfile.st_mode))
-		{
-		  //addFolder("name", repcourant);
-			get_files_directory(files[i], repcourant);
-		}
+		else
+		   afficher_erreur(files[i]);
 	}
 }
 
@@ -119,14 +118,42 @@ char * get_data(struct file_info * file)
 	return data;
 }
 
-int is_more_recent(char * path1, char * path2)
+void add_files(char * tarpath, int nb_files, files[])
 {
+	open_tar(tarpath);
+	xmlNodePtr repcourant = createXml(tarpath);
 	struct stat statfile;
+	int i;
+	for(i=0; i<nb_files; i++)
+	{
+		if( stat(files[i], &statfile) == 0)
+		{
+			struct file_info fi = get_file_info(files[i]);
+	// si le fichier à ajouter n'est pas déjà dans l'archive
+			if(file_exist(files[i]) == 0 ||
+					( update == 1 && is_more_recent())
+			{
+				if (S_ISREG(statfile.st_mode))
+				{
 
-	stat(path1, &statfile);
-	time_t f1 = statfile.st_mtime;
-	stat(path2, &statfile);
-	time_t f2 = statfile.st_mtime;
+					addFile(basename(files[i]),fi , repcourant, get_data(files[i]));
+				}
+				if (S_ISDIR (statfile.st_mode))
+				{
+					addFolder("name", repcourant);
+					add_files_directory(files[i], repcourant);
+				}
+			}
+		}
+		else
+			afficher_erreur(files[i]);
+	}
+}
+
+int is_more_recent(struct file_info * file1, struct file_info * file2)
+{
+	time_t f1 = file1->st_mtime;
+	time_t f2 = file2->st_mtime;
 
 	return f1-f2 > 0 ? 1 : 0;
 }

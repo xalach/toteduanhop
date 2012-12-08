@@ -20,6 +20,10 @@ void read_files(int nb_files, char * files[]);
 char * get_data(struct file_info * file);
 
 // test si le fichier path1 et plus récent que le fichier path2
-int is_more_recent(char * path1, char * path2);
+int is_more_recent(struct file_info * file1, struct file_info * file2);
+
+// ajoute des fichiers "files" dans l'archive "tarpath"
+// si les fichiers sont déjà présente, il applique la fonction update
+void add_files(char * tarpath, int nb_files, files[]);
 
 #endif /* READ_H_ */

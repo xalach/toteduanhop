@@ -35,12 +35,17 @@ void afficher_erreur(char * info)
 	exit(1);
 }
 
+void afficher_help()
+{
+
+}
+
 char * default_tar_name()
 {
 	time_t n = time(NULL);
 	struct tm * t = localtime(&n);
 	char * date = malloc(sizeof(char)*33);
-	//char * date[132];			// marche pas et c'est inexplicable
+	//char date[33];			// marche pas et c'est inexplicable
 	strftime(date, 33, "Archive_%Y-%m-%d_%H-%M-%S.tarx", t);
 	return date;
 }
@@ -65,6 +70,7 @@ void create_file(struct file_info * file)
 		afficher_erreur(file->name);
 	printf("fichier créer\n");
 	fclose(fw);
+	close(fd);
 }
 
 void create_directory(struct file_info * dir)
@@ -105,6 +111,7 @@ void create_folder_files(char * dirpath)
 	   }
 	   chdir("..");
 	}
+	free(flist);
 }
 
 void create_tar_files(char * tarfile)
@@ -129,5 +136,5 @@ void create_tar_files(char * tarfile)
 			}
 	   }
 	}
-	// else le tar est vide
+	free(flist);
 }

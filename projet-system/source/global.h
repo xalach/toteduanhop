@@ -13,6 +13,8 @@ const char * right_values[8];
 
 char * tar_path;				// emplacement du tar à enregistrer
 int verbose;				// booléen pour activité la verbose du logiciel
+int update;					// booléen pour précisé si l'archive doit être mis à jours
+
 
 xmlDocPtr doc;
 xmlDocPtr doctest;
