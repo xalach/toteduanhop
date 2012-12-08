@@ -1,21 +1,21 @@
-(defclass memo-enumerateur (unary-relying-enumerator)
-  ((enum-res :accessor enum-res :initform (make-enum-res)))
-  (:documentation "enumerateur avec une memoire"))
+(defclass memo-enumerator (unaire-combinaison-enumerator)
+  ((depend-res :accessor depend-res :initform (make-depend-res)))
+  (:documentation "énumérateur avec une memoire"))
 
 ; Il manque les defgeneric pour certain defmethod
 
-(defmethod make-memo-enumerateur ((e abstract-enumerator))
+(defmethod make-memo-enumerator ((e abstract-enumerator))
   (init-enumerator
-   (make-instance ’memo-enumerateur :enum (copy-enumerator e))))
+   (make-instance ’memo-enumerator :enum (copy-enumerator e))))
 
-(defmethod set-memo-res ((e memo-enumerateur))
-  (set-enum-res (enum-res e) (enum e)))
+(defmethod set-memo-res ((e memo-enumerator))
+  (set-depend-res (depend-res e) (depend e)))
 
-(defmethod init-enumerator :after ((e memo-enumerateur))
+(defmethod init-enumerator :after ((e memo-enumerator))
   (set-memo-res e))
 
-(defmethod enum-found ((e memo-enumerateur))
-  (enum-found (enum-res e)))
+(defmethod trouve-depend ((e memo-enumerateur))
+  (trouve-depend (depend-res e)))
 
-(defmethod enum-object ((e memo-enumerateur))
-  (enum-object (enum-res e)))
+(defmethod objet-depend ((e memo-enumerator))
+  (objet-depend (depend-res e)))
