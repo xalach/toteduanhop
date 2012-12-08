@@ -238,7 +238,24 @@ void open_tar(char * tarfile)
   }
 }
 
-char * get_data_tar_file(char * file)
+char * get_data_tar_file(char *pere, char * file)
 {
- return "";
+  xmlNodeSetPtr nodeset;
+  xmlXPathObjectPtr result;
+  xmlNodePtr nodePtr;
+  char path[100] ;
+  sprintf(path,"//%s/%s",pere,file);
+  
+  xmlChar *xpath = (xmlChar*) path;
+
+  result = getnodeset (xpath);
+
+  int i;
+  if (result) 
+  {
+    nodeset = result->nodesetval;
+    nodePtr = nodeset->nodeTab[0];
+    xmlXPathFreeObject (result);
+  }
+  return ((char*)xmlGetProp(nodePtr,"Data"));
 }
