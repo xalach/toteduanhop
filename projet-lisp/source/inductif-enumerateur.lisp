@@ -30,7 +30,7 @@
 
 ; si la fonction traite les valeur inferieur à 10
 ; et que current-value est à 12, ça renvoie NIL
-;QA: Ici, c'est une énumérateur simple donc on ne peut pas positionner sur un élément qu'on n'a pas encore crée.
+;QA: Ici, c'est une énumérateur simple donc on ne peut pas positionner sur un élément qu'on n'a pas encore crée!
 
 (defmethod next-element-p ((e inductif-enumerateur))
   t)
