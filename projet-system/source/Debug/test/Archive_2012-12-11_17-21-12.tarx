@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <fichier1 Time="-212023472" Mode="42113" Size="301989888" Data="donne du fichier1"/>
+  <dossier1 Time="408799056" Mode="60737" Size="1048576">
+    <dossier2 Time="610125648" Mode="60737" Size="1048576">
+      <fichier4 Time="-212023472" Mode="42113" Size="301989888" Data="donne du fichier4"/>
+      <fichier5 Time="-212023472" Mode="42113" Size="301989888" Data="donne du fichier5"/>
+    </dossier2>
+    <fichier2 Time="-212023472" Mode="42113" Size="301989888" Data="donne du fichier2"/>
+    <fichier3 Time="-212023472" Mode="42113" Size="301989888" Data="donne du fichier3"/>
+  </dossier1>
+</root>

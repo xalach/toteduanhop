@@ -63,25 +63,34 @@ xmlNodePtr parcoursNode(xmlNodePtr a_node, char *name)
 
   void printElements(xmlNodePtr a_node, char *indentation, int i) 
   {
-    if(xmlGetProp(a_node,"Data") == NULL) //répertoire
-    {
-      char indent[100] ;
-    sprintf(indent,"| %s",indentation);
-      printf("%s%s \n", indentation, a_node->name);
-      printElements(a_node->children,indent,i);
-      if (a_node->next != NULL)
-      {
-        printElements(a_node->next,indentation,i);
-      }
-    }
-    else if(xmlGetProp(a_node,"Time")!=NULL) //fichier
-    {
-      printf("%s%s \n", indentation, a_node->name);
-      if (a_node->next != NULL)
-      {
-        printElements(a_node->next,indentation,i);
-      }
-    }
+		if(xmlGetProp(a_node,"Data") == NULL) //répertoire
+		{
+		  char indent[100] ;
+		sprintf(indent,"| %s",indentation);
+		if(xmlStrcmp(a_node->name,(BAD_CAST "text")) != 0)
+		{
+		  printf("%s%s \n", indentation, a_node->name);
+	  }
+		  if(a_node->children != NULL )
+		  {
+				printElements(a_node->children,indent,i);
+			}	
+		  if (a_node->next != NULL)
+		  {
+			printElements(a_node->next,indentation,i);
+		  }
+		}
+		else if(xmlGetProp(a_node,"Time")!=NULL) //fichier
+		{
+		 if(xmlStrcmp(a_node->name,(BAD_CAST "text")) != 0)
+		{
+		  printf("%s%s \n", indentation, a_node->name);
+	  }
+		  if (a_node->next != NULL)
+		  {
+			printElements(a_node->next,indentation,i);
+		  }
+}
      /* int j;
       xmlNodePtr currentNode = NULL;
       for (currentNode = a_node->children; currentNode; currentNode = currentNode->next) 

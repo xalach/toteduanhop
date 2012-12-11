@@ -19,8 +19,6 @@ int main( int argc, char* argv[] )
 	verbose = update = 0;
 	char * currentdirectory = realpath(".",NULL);
 	char * destpath; // chemin de destination du fichier tar
-	struct file_info fi = get_file_info("help.txt");
-	afficher_file(&fi);
 
 // Gestion des options
 	extern int optind, optopt;
@@ -29,11 +27,9 @@ int main( int argc, char* argv[] )
 // le string "hvc:tr:u:x:f:zd:sm:" représente les paramètre qu'on veut reconnaitre
 // un ":" signifie que le paramêtre prend une valeur après
 
-	printf("argc = %d\n", argc);
-
 	if (argc > 1)
 	{
-		while( (opt = getopt(argc, argv, "hvc:tr:u:x:f::zd:sm:")) != -1 )
+		while( (opt = getopt(argc, argv, "hvc:t:r:u:x:f::zd:sm:")) != -1 )
 		{
 			char ** flist;
 			int nbfile;
