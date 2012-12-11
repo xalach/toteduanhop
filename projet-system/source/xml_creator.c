@@ -199,7 +199,6 @@ void delete_file(char * pere , char * name)
   xmlNodePtr nodePtr;
   char path[100] ;
   sprintf(path,"//%s/%s",pere,name);
-  
   xmlChar *xpath = (xmlChar*) path;
 
   result = getnodeset (xpath);

@@ -22,6 +22,7 @@ int main( int argc, char* argv[] )
 
 // Gestion des options
 	extern int optind, optopt;
+	
 	extern char *optarg;
 	int opt;
 // le string "hvc:tr:u:x:f:zd:sm:" représente les paramètre qu'on veut reconnaitre
@@ -33,7 +34,7 @@ int main( int argc, char* argv[] )
 		{
 			char ** flist;
 			int nbfile;
-			printf( "%c - %d - %d : %s\n", opt, optind, optopt, optarg);
+			//printf( "%c - %d - %d : %s\n", opt, optind, optopt, optarg);
 			switch(opt)
 			{
 				case 'h':
@@ -105,7 +106,9 @@ int main( int argc, char* argv[] )
 
 		// Supression d'un fichier
 				case 'd':
-					//delete_tar(optarg);
+					open_tar(optarg);
+					delete_file("root", argv[optind]);
+					xmlSaveFormatFileEnc(optarg,doc,"utf-8",1);
 					break;
 
 		// Retirer des "0" en trop
