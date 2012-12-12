@@ -2,8 +2,7 @@
   ())
 
 (defmethod next-element-p ((e parallel-enumerator))
-  (every #’next-element-p
-	   (sous-enumerators e)))
+  (every #’next-element-p (sous-enumerators e)))
 
 (defmethod next-element ((e parallel-enumerator))
   (loop

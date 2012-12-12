@@ -1,4 +1,10 @@
+; ~~~~~~~ CLASS : PRODUIT ENUMERATEUR ~~~~~~~~~~
+
+; ????
+; Produit n'est pas juste dépendant de nnaire-combinaison-enumerator ?
+; comment tu l'as fait sur le schéma que tu m'as donnée
 (defclass produit-enumerator (unaire-combinaison-enumerator fun-mixin)())
+
 
 (defmethod make-produit-enumerator (fun (depends (eql nil)))
   (make-empty-enumerator))
