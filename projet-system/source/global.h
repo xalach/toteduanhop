@@ -18,9 +18,11 @@ xmlDocPtr doc;
 struct file_info
 {
 	char* name;
-	char* create_time[sizeof(time_t)];		// converti en Char* via ctime(&create_time);
-	char* mode[sizeof(mode_t)];				// converti en Char* via sprintf(%o)
-	char* size[sizeof(off_t)];				// à convertir avec htonl, convertir en long avec atoi() et ntohl()
+	char* create_time[100];//sizeof(time_t)];		// converti en Char* via ctime(&create_time);
+	char* mode[100];//sizeof(mode_t)];				// converti en Char* via sprintf(%o)
+	char* size[100];//sizeof(off_t)];				// à convertir avec htonl, convertir en long avec atoi() et ntohl()
 };
+
+struct file_info files[512];
 
 #endif /* GLOBAL_H_ */

@@ -19,6 +19,8 @@ int main( int argc, char* argv[] )
 	verbose = update = 0;
 	char * currentdirectory = realpath(".",NULL);
 	char * destpath; // chemin de destination du fichier tar
+	/*struct file_info test = get_file_info("help.txt");
+	afficher_file(&test);*/
 
 // Gestion des options
 	extern int optind, optopt;

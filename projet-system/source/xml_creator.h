@@ -16,12 +16,12 @@ void printElements(xmlNodePtr a_node, char *indentation,int i);
  * Fonction à faire pour Desarchiver
  ****************************************************/
 
-int tar_root_files(struct file_info ** files);
+int tar_root_files();
 // 		- files : tableau de structure file_info pour chaque fichiers et dossier à la racine
 // 		- retourne la taille du tableau
 // --> comme fait la fonction scandir
 
-int tar_folder_files(char *pere, char * folder, struct file_info ** files);
+int tar_folder_files(char *pere, char * folder);
 // 		-folder : le dossier à explorer
 // 		-files : tableau de structure file_info pour chaque fichiers et dossier du "folder"
 // 		- retourne la taille du tableau

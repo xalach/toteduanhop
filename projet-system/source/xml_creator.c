@@ -105,7 +105,7 @@ xmlNodePtr parcoursNode(xmlNodePtr a_node, char *name)
   }
 
 
-int tar_root_files(struct file_info ** files) //retourne le nombre d'élément à la racine et remplit le tableau des files_infos
+int tar_root_files() //retourne le nombre d'élément à la racine et remplit le tableau des files_infos
 {
   xmlNodePtr rootNode = xmlDocGetRootElement(doc);
   struct file_info tmp[512];
@@ -115,16 +115,27 @@ int tar_root_files(struct file_info ** files) //retourne le nombre d'élément �
   {
     if (xmlGetProp(currentNode,"Time")!=NULL)
     {
-      tmp[i].name = currentNode->name;
-      *(tmp[i].size) = (char *)xmlGetProp(currentNode,"Size");
+		files[i].name = currentNode->name;
+      sprintf((files[i].size), "%s", (char *)xmlGetProp(currentNode,"Size"));
+      sprintf((files[i].create_time), "%s", (char *)xmlGetProp(currentNode,"Time"));
+      sprintf((files[i].mode), "%s", (char *)xmlGetProp(currentNode,"Mode"));
+	  printf("files : %s - %s - %s - %s\n",(files[i]).name, (files[i]).size, (files[i]).create_time, (files[i]).mode);
+    /*  tmp[i].name = currentNode->name;
+      sprintf((tmp[i].size), "%s", (char *)xmlGetProp(currentNode,"Size"));
+      sprintf((tmp[i].create_time), "%s", (char *)xmlGetProp(currentNode,"Time"));
+      sprintf((tmp[i].mode), "%s", (char *)xmlGetProp(currentNode,"Mode"));
+      
       *(tmp[i].create_time) = (char *)xmlGetProp(currentNode,"Time");
       *(tmp[i].mode) = (char *)xmlGetProp(currentNode,"Mode");
-        //printf("%s - %s - %s - %s\n",tmp[i].name, tmp[i].size, tmp[i].create_time, tmp[i].mode);
+       //printf("%s - %s - %s - %s\n",tmp[i].name, (char *)xmlGetProp(currentNode,"Size"), (char *)xmlGetProp(currentNode,"Time"), (char *)xmlGetProp(currentNode,"Mode"));
+		printf("%s - %s - %s - %s\n",tmp[i].name, tmp[i].size, tmp[i].create_time, tmp[i].mode);*/
+
       i++;
     }
   }
-  files = &tmp;
-  return i;
+  int n=i;
+  
+  return n;
 }
 
 xmlXPathObjectPtr getnodeset (xmlChar *xpath)
@@ -151,12 +162,13 @@ xmlXPathObjectPtr getnodeset (xmlChar *xpath)
   return result;
 }
 
-int tar_folder_files(char *pere, char * folder, struct file_info ** files)
+int tar_folder_files(char *pere, char *folder)
 {
   xmlNodeSetPtr nodeset;
   xmlXPathObjectPtr result;
   xmlNodePtr nodePtr;
   char path[100] ;
+  printf("%s : %s \n",pere,folder);
   sprintf(path,"//%s/%s",pere,folder);
   
   xmlChar *xpath = (xmlChar*) path;
@@ -171,24 +183,21 @@ int tar_folder_files(char *pere, char * folder, struct file_info ** files)
     xmlXPathFreeObject (result);
   }
 
-
   xmlNodePtr rootNode = nodePtr ;
-  struct file_info tmp[512];
   i = 0;
   xmlNodePtr currentNode = NULL;
   for(currentNode = rootNode->children ; currentNode ; currentNode = currentNode->next)
   {
     if (xmlGetProp(currentNode,"Time")!=NULL)
     {
-      tmp[i].name = currentNode->name;
-      *(tmp[i].size) = (char *)xmlGetProp(currentNode,"Size");
-      *(tmp[i].create_time) = (char *)xmlGetProp(currentNode,"Time");
-      *(tmp[i].mode) = (char *)xmlGetProp(currentNode,"Mode");
-        //printf("%s - %s - %s - %s\n",tmp[i].name, *tmp[i].size, *tmp[i].create_time, *tmp[i].mode);
+      files[i].name = currentNode->name;
+      sprintf((files[i].size), "%s", (char *)xmlGetProp(currentNode,"Size"));
+      sprintf((files[i].create_time), "%s", (char *)xmlGetProp(currentNode,"Time"));
+      sprintf((files[i].mode), "%s", (char *)xmlGetProp(currentNode,"Mode"));
+	  printf("files : %s - %s - %s - %s\n",(files[i]).name, (files[i]).size, (files[i]).create_time, (files[i]).mode);
       i++;
     }
   }
-  files = &tmp;
   return i;
 }
 

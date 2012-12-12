@@ -77,7 +77,7 @@ void create_directory(struct file_info * dir)
 {
 	mode_t dirmod = ntohs(atoi(&dir->mode));
 
-	if ( mkdir("test", NULL) != 0 )
+	if ( mkdir(dir->name, NULL) != 0 )
 		afficher_erreur(dir->name);
 
 	struct utimbuf chgtm;
@@ -89,52 +89,55 @@ void create_directory(struct file_info * dir)
 
 void create_folder_files(char * parent, char * dirpath)
 {
-	struct file_info **flist;
+	struct file_info flist[512];
 	int n;
-	n = tar_folder_files(parent, dirpath, &flist);
+	n = tar_folder_files(parent, dirpath);
 	if ( n > 0 )
 	{
 	   chdir(dirpath);
 	   int i=0;
 	   while ( i < n)
 	   {
-		   mode_t mf = ntohs(atoi(&flist[i]->mode));
+		   mode_t mf = ntohs(atoi(files[i].mode));
 		   if (S_ISREG(mf))
 			{
-			   create_file(parent, flist[i]);
+			   create_file(parent,&files[i]);
 			}
 			if (S_ISDIR (mf))
 			{
-				create_directory(flist[i]);
-				create_folder_files(dirpath, flist[i]->name);
+				create_directory(&files[i]);
+				create_folder_files(basename(dirpath), files[i].name);
 			}
+			i++;
 	   }
 	   chdir("..");
 	}
-	free(flist);
 }
 
 void create_tar_files(char * tarpath)
 {
 	open_tar(tarpath);
-	struct file_info **flist;
-	int n = tar_root_files(&flist);
+	struct file_info flist[512];
+	int n = tar_root_files();
 	if ( n > 0 )
 	{
 	   int i=0;
 	   while ( i < n)
 	   {
-			mode_t mf = ntohs(atoi(flist[i]->mode));
+			mode_t mf = ntohs(atoi(files[i].mode));
+			printf("out : %s - %s - %s - %s\n",files[i].name, files[i].size, files[i].create_time, files[i].mode);
+			printf("%d\n",mf);
 			if (S_ISREG(mf))
 			{
-				create_file("root", flist[i]);
+				create_file("root", &files[i]);
 			}
 			if (S_ISDIR (mf))
 			{
-				create_directory(flist[i]);
-				create_folder_files(basename(tarpath), flist[i]->name);
+				create_directory(&files[i]);
+				create_folder_files(basename(tarpath), files[i].name);
 			}
+			i++;
 	   }
 	}
-	free(flist);
+	//free(flist);
 }
