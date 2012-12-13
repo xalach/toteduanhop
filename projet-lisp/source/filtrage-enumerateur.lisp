@@ -9,6 +9,8 @@
 ; (defun trouve-depend (depend enum) ... )
 ; (defun objet-depend (depend e) ... )
 
+;c'est dans la classe memo-enumerator
+
 (defmethod skip-to-next ((e filtrage-enumerator))
   (loop
      while (trouve-depend (depend e))
