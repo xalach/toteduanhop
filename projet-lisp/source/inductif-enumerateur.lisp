@@ -40,4 +40,4 @@
 ; mis en place de valeur par défault pour current-value
 ; pour eviter de faire un "unless" dans la fonction
 (defun make-inductif-enumerateur (init-value fun &optional (current-value init-value))
-  (make-instance ’inductif-enumerateur :fun fun :init-value init-value :current-value current-value)
+  (make-instance 'inductif-enumerateur :fun fun :init-value init-value :current-value current-value))

@@ -12,8 +12,8 @@
   (when circp
     (progn
       (setf l (circ l))
-      (setf *print-cirlcle* t))     ; rendre l'affiche circulaire
-    (make-instance 'list-enumerator :initial-list l :current-list l)))
+      (setf *print-cirlcle* t)))     ; rendre l'affiche circulaire
+    (make-instance 'list-enumerator :enum-list l :enum-list l))
 
 
 (defmethod init-enumerator ((e list-enumerator))

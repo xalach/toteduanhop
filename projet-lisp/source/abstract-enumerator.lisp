@@ -1,7 +1,4 @@
-(defpackage :abstract-enumerator
-  (:export * )
-  (:use :common-lisp))
-(in-package :abstract-enumerator)
+; ~~~~~~~~ CLASS ABSTRAITE : ENUMERATEUR ABSTRAIT ~~~~~~~~~~~~~
 
 (defclass abstract-enumerator () ())
 
@@ -24,7 +21,7 @@ Autrement retourne NIL et NIL"))
 (defmethod call-enumerator ((e abstract-enumerator))
   (if (next-element-p e)
       (values (next-element e) T)
-      (values (NIL NIL))))
+      (values NIL NIL)))
 
 (defmethod init-enumerator ((e abstract-enumerator))
-  e)
+  e) 

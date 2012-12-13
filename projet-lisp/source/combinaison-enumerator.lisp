@@ -4,7 +4,9 @@
   (:documentation "énumérateur qui dépend au moins une autre énumérateur"))
 
 (defgeneric sous-enumerators (combinaison-enumerator)
-  (:documentation "les enumerateurs le combinaison-enumerator est dépendant"))
+  (:documentation "retourne les enumérateurs de la combinaison ?"))
 
 (defmethod init-enumerator :after ((e combinaison-enumerator))
-  (mapc #’init-enumerator (combinaison-enumerators e)))
+  (mapc #'init-enumerator (combinaison-enumerators e)))
+  
+; d'ou vient combinaison-enumerators ???
