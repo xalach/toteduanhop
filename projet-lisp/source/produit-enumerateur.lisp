@@ -3,6 +3,9 @@
 ; ????
 ; Produit n'est pas juste dépendant de nnaire-combinaison-enumerator ?
 ; comment tu l'as fait sur le schéma que tu m'as donnée
+
+;effectivement, j'ai du fait une faute dans le schéma, le produit-enumerator hérite aussi la classe fun-mixin
+
 (defclass produit-enumerator (unaire-combinaison-enumerator fun-mixin)())
 
 
