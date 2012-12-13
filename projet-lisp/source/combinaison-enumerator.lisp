@@ -10,3 +10,4 @@
   (mapc #'init-enumerator (combinaison-enumerators e)))
   
 ; d'ou vient combinaison-enumerators ???
+;c'est une classe abstraite pour les deux autres classes abstraites (unaire-combinaison-enumerator et nnaire-combinaison-enumerator) afin d'implémenter les classes concrètes demandées.
