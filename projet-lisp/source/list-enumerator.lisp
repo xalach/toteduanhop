@@ -36,4 +36,4 @@
     (progn
       (setf l (circ l))
       (setf *print-cirlcle* t)))     ; rendre l'affiche circulaire
-    (make-instance 'list-enumerator :enum-list l :enum-list l))
+    (make-instance 'list-enumerator :init-list l :enum-list l))
