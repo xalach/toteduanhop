@@ -61,13 +61,17 @@ Autrement retourne NIL et NIL"))
      (setf enum-list (cdr enum-list)))))
 
 
-
-; ############ ENUMERATEUR INDUCTIF ###############
+; ###########################################
+; ############ FONCTION MIXIN ###############
 
 (defclass fun-mixin ()
   ((fun :initarg :fun :reader fun)))
+  
 
-(defclass inductif-enumerateur (abstract-enumerator fun-mixin) 
+; ################################################# 
+; ############ ENUMERATEUR INDUCTIF ###############
+
+(defclass inductif-enumerator (abstract-enumerator fun-mixin) 
   ((init-value 
     :initarg :init-value 
     :accessor init-value) 
@@ -75,59 +79,104 @@ Autrement retourne NIL et NIL"))
     :initarg :current-value 
     :accessor current-value)))
 
-(defmethod init-enumerator ((e inductif-enumerateur))
+(defmethod init-enumerator ((e inductif-enumerator))
   (setf (current-value e) (init-value e))
   e)
 
-(defmethod copy-enumerator ((e inductif-enumerateur))
+(defmethod copy-enumerator ((e inductif-enumerator))
   (with-slots ((init  init-value)) e
-    (make-instance 'inductif-enumerateur :init-value init :current-value init)))
+    (make-instance 'inductif-enumerator :init-value init :current-value init)))
 
-(defmethod next-element-p ((e inductif-enumerateur))
+(defmethod next-element-p ((e inductif-enumerator))
   t)
 
-(defmethod next-element ((e inductif-enumerateur))
+(defmethod next-element ((e inductif-enumerator))
   (setf (current-value e) (funcall (fun e) (current-value e))))
 
-(defun make-inductif-enumerateur (init-value fun &optional (current-value init-value))
-  (make-instance 'inductif-enumerateur :fun fun :init-value init-value :current-value current-value))
+(defun make-inductif-enumerator (init-value fun &optional (current-value init-value))
+  (make-instance 'inductif-enumerator :fun fun :init-value init-value :current-value current-value))
+  
+
+; ######################################################## 
+; ############ ENUMERATEUR MODULO INDUCTIF ###############
+  
+(defclass inductive-modulo-enumerator (inductive-enumerator)
+  ((mod-fun :initarg :mod-fun
+    :reader mod-fun)))
+
+(defmethod init-enumerator :after ((e mod-inductive-enumerator))
+  (setf (current-value e)
+    (funcall
+    (mod-fun e)
+    (current-value e))))
+
+(defmethod next-element :after ((e mod-inductive-enumerator))
+  (setf (current-value e)
+    (funcall
+    (mod-fun e)
+    (current-value e))))
+
+(defun make-inductive-modulo-enumerator (initial-value fun mod-fun &optional current-value)
+  (unless current-value
+    (setf current-value initial-value))
+  (make-instance
+  ’inductive-modulo-enumerator
+  :fun fun
+  :mod-fun mod-fun
+  :initial-value initial-value
+  :current-value current-value))
 
 
+; ####################################################
 ; ############## COMBINAISON ENUMERATEUR #############
-; # Class abstraire qui représente 
-; # un énumérateur d'énumérateurs
 
 (defclass combinaision-enumerator (abstract-enumerator) ()
   (:documentation "énumérateur qui dépend au moins une autre énumérateur"))
 
-(defmethod init-enumerator :after ((e combinaison-enumerator))
-  (mapc #'init-enumerator (sous-enumerators e)))
-
-
-; ############# COMBINAISON N-NAIRE ENUMERATEUR ##########
+; 		~~~~~~~~~ Enumerateur N-naire ~~~~~~~~~~~
 
 (defclass nnaire-combinaison-enumerator (combinaison-enumerator)
   ((depends :type list :initarg :depends :reader sous-enumerators))
   (:documentation "énumérateur qui dépend à plusierus autres énumérateurs"))
-
-
-; ############ ENUMERATEUR PARALLELE ###############
-
-(defclass parallele-enumerator (nnaire-combinaison-enumerator)
-  ())
-
-; test next-element-p des sous enumerators via l'accesseur en lecture
-(defmethod next-element-p ((e parallele-enumerator))
-  (every #'next-element-p (sous-enumerators e)))
-
-(defmethod next-element ((e parallele-enumerator))
+  
+(defmethod next-element ((e nnaire-combinaison-enumerator))
   (loop
      for enumerator
      in (sous-enumerators e)
      collect (next-element enumerator)))
+     
+(defmethod next-element-p ((e nnaire-combinaison-enumerator))
+  (every #'next-element-p (sous-enumerators e)))
 
-(defmethod init-enumerator ((e parallele-enumerator))
+(defmethod init-enumerator ((e nnaire-combinaison-enumerator))
   (every #'init-enumerator (sous-enumerators e)))
+
+; 		~~~~~~~~~ Enumerateur U-naire ~~~~~~~~~~~ 
+  
+(defclass unaire-combinaison-enumerator (combinaison-enumerator)
+  ((depend 
+  	:type abstract-enumerator 
+  	:initarg :depend 
+  	:reader depend))
+  (:documentation "énumérateur qui dépend à un seul autre énumérateur"))
+
+(defmethod init-enumerator ((e unaire-combinaison-enumerator))
+  (init-enumerator (depend e)))
+
+(defmethod copy-enumerator ((e unaire-combinaison-enumerator))
+	(make-instance 'unaire-combinaison-enumerator :depend (copy-enumerator (depend e))))
+
+(defmethod next-element-p ((e unaire-combinaison-enumerator))
+  (next-element-p (depend e)))
+
+(defmethod next-element-p ((e unaire-combinaison-enumerator))
+  (next-element (depend e)))
+
+; ##################################################
+; ############ ENUMERATEUR PARALLELE ###############
+
+(defclass parallele-enumerator (nnaire-combinaison-enumerator)
+  ())
 
 (defmethod copy-enumerator ((e parallele-enumerator))
   (let ((nl '()))  ; créer une nouvelle liste d'énumérateur
@@ -152,6 +201,7 @@ Autrement retourne NIL et NIL"))
   (make-instance 'parallele-enumerator :depends enums))
 
 
+; #####################################################
 ; ############ COMBINAISON U-NAIRE ENUMERATOR #########
 
 (defclass unaire-combinaison-enumerator (combinaison-enumerator)
@@ -174,16 +224,11 @@ Autrement retourne NIL et NIL"))
   (next-element (depend e)))
   
 
+; ##############################################
 ; ########## FILTRAGE ENUMERATEUR ##############
 
 (defclass filtrage-enumerator (unaire-combinaison-enumerator fun-mixin)
   ())
-
-(defmethod init-enumerator ((e filtrage-enumerator))
-  (init-enumerator (depend e)))
-
-(defmethod init-enumerator ((e filtrage-enumerator))
-  (init-enumerator (depend e)))
 
 (defmethod copy-enumerator ((e filtrage-enumerator))
   (make-instance 'filtrage-enumerator :depend (copy-enumerator (depend e)) :fun (fun e)))
@@ -206,6 +251,7 @@ Autrement retourne NIL et NIL"))
   (make-instance 'filtrage-enumerator :depend enum :fun filter-fun))
   
 
+; #############################################
 ; ########## MEMOIRE ENUMERATEUR ##############
 
 (defclass memo-enumerator (unaire-combinaison-enumerator)
@@ -230,3 +276,74 @@ Autrement retourne NIL et NIL"))
 
 (defun make-memo-enumerator (enum)
 	(make-instance 'memo-enumerator :depend e))
+	
+
+; ###################################################
+; ########## CONCATENATION ENUMERATEUR ##############
+	
+(defclass conca-enumerator (nnaire-combinaison-enumerator)
+	((next-elements
+	:initform nil
+	:accessor next-elements))
+	(:documentation "concaténation les listes que le sous énuméteur ont énuméré"))
+
+(defmethod skip-to-next-non-null ((e conca-enumerator))
+	(loop
+	  until (next-elements e)
+	  while (next-element-p (depend e))
+	  do (setf (next-elements e)
+		   (next-element (depend e))
+
+(defmethod init-enumerator :after ((e conca-enumerator))
+	(skip-to-next-non-null e))
+
+(defmethod next-element-p ((e conca-enumerator))
+	(next-elements e))
+
+(defmethod next-element ((e conca-enumerator))
+	(prog1
+		(pop (next-elements e))
+	(skip-to-next-non-null e)))
+
+(defun make-conca-enumerator (enum)
+  (make-instance 'conca-enumerator :depend (copy-enumerator e)))
+
+
+; #############################################
+; ########## PRODUIT ENUMERATEUR ##############
+
+(defclass produit-enumerator (nnaire-combinaison-enumerator fun-mixin)())
+
+(defmethod make-produit-enumerator (fun (depends (eql nil)))
+  (make-empty-enumerator))
+
+(defmethod make-produit-enumerator (fun (depends list))
+  (let ((v (map ’vector #’make-memo-enumerator depends)))
+    (if (every #’trouve-depend v)
+	(make-instance ’produit-enumerateur :sous-enumerators v :fun fun)
+	(make-empty-enumerator))))
+
+(defmethod depend-i ((e produit-enumerator) (i integer))
+  (aref (sous-enumerators e) i))
+
+(defmethod next-element-p ((e produit-enumerator))
+	(trouve-depend (depend-i e 0)))
+
+(defmethod next-element ((e produit-enumerator))
+  (let ((depends (sous-enumerators e)))
+    (prog1
+	(apply
+	 (fun e)
+	 (map ’list
+	       (lambda (ei)
+		 (enum-object ei)) enums))
+      (let ((index (1- (length enums))))
+	(set-memo-result (depend-i e index))
+	(loop 
+	  until (trouve-depend
+		 (depend-i e index))
+	  until (zerop index)
+	  do (init-enumerator
+	      (depend-i e index))
+	  do (set-memo-result
+	      (depend-i e (decf index))))))))
