@@ -6,7 +6,7 @@
 
 ;effectivement, j'ai du fait une faute dans le schéma, le produit-enumerator hérite aussi la classe fun-mixin
 
-(defclass produit-enumerator (unaire-combinaison-enumerator fun-mixin)())
+(defclass produit-enumerator (nnaire-combinaison-enumerator fun-mixin)())
 
 
 (defmethod make-produit-enumerator (fun (depends (eql nil)))
