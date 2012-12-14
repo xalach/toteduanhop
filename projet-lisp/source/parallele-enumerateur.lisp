@@ -13,7 +13,11 @@
 ; des methodes à implémenter
 
 (defmethod init-enumerator ((e parallel-enumerator))
+  ())
   (:documentation "reinitialise et retourne ENUMERATOR"))
 
 (defgeneric copy-enumerator ((e parallel-enumerator))
   (:documentation "return une copie reinitialisé de ENUMERATOR"))
+
+(defun make-parallel-enumerator (e &sous-enumerators sous-enumerators)
+  (make-instance 'parallel-enumerator (append (list e) sous-enumerators)))
