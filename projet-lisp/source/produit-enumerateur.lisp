@@ -27,18 +27,18 @@
 (defmethod next-element ((e produit-enumerator))
   (let ((depends (sous-enumerators e)))
     (prog1
-			(apply
-	 			(fun e)
-	 			(map ’list
-	       	(lambda (ei)
-		 				(enum-object ei)) enums))
+	(apply
+	 (fun e)
+	 (map ’list
+	       (lambda (ei)
+		 (enum-object ei)) enums))
       (let ((index (1- (length enums))))
-				(set-memo-result (depend-i e index))
-				(loop 
-	  			until (trouve-depend
-		 						(depend-i e index))
-	  			until (zerop index)
-	  			do (init-enumerator
-	      		(depend-i e index))
-	  			do (set-memo-result
-	      		(depend-i e (decf index))))))))
+	(set-memo-result (depend-i e index))
+	(loop 
+	  until (trouve-depend
+		 (depend-i e index))
+	  until (zerop index)
+	  do (init-enumerator
+	      (depend-i e index))
+	  do (set-memo-result
+	      (depend-i e (decf index))))))))

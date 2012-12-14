@@ -4,18 +4,15 @@
 	:accessor next-elements))
 	(:documentation "concaténation les listes que le sous énuméteur ont énuméré"))
 
-(defmethod make-conca-enumerator ((e abstract-enumerator))
-	(init-enumerator
-		(make-instance
-		’conca-enumerator
-		:depend (copy-enumerator e))))
+(defun make-conca-enumerator (enum)
+  (make-instance 'conca-enumerator :depend (copy-enumerator e)))
 
 (defmethod skip-to-next-non-null ((e conca-enumerator))
 	(loop
-		until (next-elements e)
-		while (next-element-p (depend e))
-		do (setf (next-elements e)
-						 (next-element (depend e))
+	  until (next-elements e)
+	  while (next-element-p (depend e))
+	  do (setf (next-elements e)
+		   (next-element (depend e))
 
 (defmethod init-enumerator :after ((e conca-enumerator))
 	(skip-to-next-non-null e))

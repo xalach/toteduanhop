@@ -94,12 +94,98 @@ Autrement retourne NIL et NIL"))
 
 
 ; ############## COMBINAISON ENUMERATEUR #############
+; # Class abstraire qui représente 
+; # un énumérateur d'énumérateurs
 
 (defclass combinaision-enumerator (abstract-enumerator) ()
   (:documentation "énumérateur qui dépend au moins une autre énumérateur"))
 
-(defgeneric sous-enumerators (combinaison-enumerator)
-  (:documentation "les enumerateurs le combinaison-enumerator est dépendant"))
-
 (defmethod init-enumerator :after ((e combinaison-enumerator))
-  (mapc #'init-enumerator (combinaison-enumerators e)))
+  (mapc #'init-enumerator (sous-enumerators e)))
+
+
+; ############# COMBINAISON N-NAIRE ENUMERATEUR ##########
+
+(defclass nnaire-combinaison-enumerator (combinaison-enumerator)
+  ((depends :type list :initarg :depends :reader sous-enumerators))
+  (:documentation "énumérateur qui dépend à plusierus autres énumérateurs"))
+
+
+; ############ ENUMERATEUR PARALLELE ###############
+
+(defclass parallele-enumerator (nnaire-combinaison-enumerator)
+  ())
+
+; test next-element-p des sous enumerators via l'accesseur en lecture
+(defmethod next-element-p ((e parallele-enumerator))
+  (every #'next-element-p (sous-enumerators e)))
+
+(defmethod next-element ((e parallele-enumerator))
+  (loop
+     for enumerator
+     in (sous-enumerators e)
+     collect (next-element enumerator)))
+
+(defmethod init-enumerator ((e parallele-enumerator))
+  (every #'init-enumerator (sous-enumerators e)))
+
+(defmethod copy-enumerator ((e parallele-enumerator))
+  (let ((nl '()))  ; créer une nouvelle liste d'énumérateur
+    (loop
+      for enumerator
+	in (sous-enumerators e)
+      collect (setf nl (cons (copy-enumerator enumerator) nl)))
+    (make-instance 'parallele-enumerator :depends nl)))
+
+(defmethod call-enumerator ((e abstract-enumerator))
+  (let ((l '()))  ; liste des resultats
+    (loop
+      for enumerator
+	in (sous-enumerators e) collect 
+	  (multiple-value-bind (v r) (next-element enumerator)
+	    (if (not r)
+		(return (values NIL NIL))
+		(setf l (cons v l)))))
+    (values l T)))
+
+(defun make-parallele-enumerator (&rest enums)
+  (make-instance 'parallele-enumerator :depends enums))
+
+
+; ############ COMBINAISON U-NAIRE ENUMERATOR #########
+
+(defclass unaire-combinaison-enumerator (combinaison-enumerator)
+  ((depend 
+  	:type abstract-enumerator 
+  	:initarg :depend 
+  	:reader depend))
+  (:documentation "énumérateur qui dépend à un seul autre énumérateur"))
+
+
+; ########## FILTRAGE ENUMERATEUR ##############
+
+(defclass filtrage-enumerator (unaire-combinaison-enumerator fun-mixin)
+  ())
+
+(defmethod init-enumerator ((e filtrage-enumerator))
+  (init-enumerator (depend e)))
+
+(defmethod copy-enumerator ((e filtrage-enumerator))
+  (make-instance 'filtrage-enumerator :depend (copy-enumerator (depend e))))
+
+(defmethod next-element-p ((e filtrage-enumerator))
+  (let ((ce (depend e)))    ; travail avec une copie
+    (do ((fin T)) ((not fin))
+      (multiple-value-bind (v trv) (call-enumerator ce)
+	(setf fin trv)
+	(if (funcall (fun e) v)
+	    (return T)))))
+  NIL)
+
+(defmethod next-element ((e filtrage-enumerator))
+  (do ((fin T) (v)) ((not fin))
+    (if (funcall (fun e) (setf v (next-element (depend e))))
+	(return v))))
+
+(defun make-filtrage-enumerator (enum filter-fun)
+  (make-instance 'filtrage-enumerator :depend enum :fun filter-fun))
