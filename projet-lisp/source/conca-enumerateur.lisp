@@ -1,11 +1,8 @@
-(defclass conca-enumerator (unaire-combinaison-enumerator)
+(defclass conca-enumerator (nnaire-combinaison-enumerator)
 	((next-elements
 	:initform nil
 	:accessor next-elements))
 	(:documentation "concaténation les listes que le sous énuméteur ont énuméré"))
-
-(defun make-conca-enumerator (enum)
-  (make-instance 'conca-enumerator :depend (copy-enumerator e)))
 
 (defmethod skip-to-next-non-null ((e conca-enumerator))
 	(loop
@@ -24,3 +21,6 @@
 	(prog1
 		(pop (next-elements e))
 	(skip-to-next-non-null e)))
+
+(defun make-conca-enumerator (enum)
+  (make-instance 'conca-enumerator :depend (copy-enumerator e)))

@@ -1,19 +1,6 @@
 (defclass parallele-enumerator (nnaire-combinaison-enumerator)
   ())
 
-; test next-element-p des sous enumerators via l'accesseur en lecture
-(defmethod next-element-p ((e parallele-enumerator))
-  (every #'next-element-p (sous-enumerators e)))
-
-(defmethod next-element ((e parallele-enumerator))
-  (loop
-     for enumerator
-     in (sous-enumerators e)
-     collect (next-element enumerator)))
-
-(defmethod init-enumerator ((e parallele-enumerator))
-  (every #'init-enumerator (sous-enumerators e)))
-
 (defmethod copy-enumerator ((e parallele-enumerator))
   (let ((nl '()))  ; créer une nouvelle liste d'énumérateur
     (loop

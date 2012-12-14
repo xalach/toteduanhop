@@ -1,4 +1,4 @@
-; ~~~~~~~~ CLASS ABSTRAITE : ENUMERATEUR ABSTRAIT ~~~~~~~~~~~~~
+; ######## ENUMERATEUR ABSTRAIT ########"
 
 (defclass abstract-enumerator () ())
 
@@ -161,6 +161,18 @@ Autrement retourne NIL et NIL"))
   	:reader depend))
   (:documentation "énumérateur qui dépend à un seul autre énumérateur"))
 
+(defmethod init-enumerator ((e unaire-combinaison-enumerator))
+  (init-enumerator (depend e)))
+
+(defmethod copy-enumerator ((e unaire-combinaison-enumerator))
+	(make-instance 'unaire-combinaison-enumerator :depend (copy-enumerator (depend e))))
+
+(defmethod next-element-p ((e unaire-combinaison-enumerator))
+  (next-element-p (depend e)))
+
+(defmethod next-element-p ((e unaire-combinaison-enumerator))
+  (next-element (depend e)))
+  
 
 ; ########## FILTRAGE ENUMERATEUR ##############
 
@@ -170,8 +182,11 @@ Autrement retourne NIL et NIL"))
 (defmethod init-enumerator ((e filtrage-enumerator))
   (init-enumerator (depend e)))
 
+(defmethod init-enumerator ((e filtrage-enumerator))
+  (init-enumerator (depend e)))
+
 (defmethod copy-enumerator ((e filtrage-enumerator))
-  (make-instance 'filtrage-enumerator :depend (copy-enumerator (depend e))))
+  (make-instance 'filtrage-enumerator :depend (copy-enumerator (depend e)) :fun (fun e)))
 
 (defmethod next-element-p ((e filtrage-enumerator))
   (let ((ce (depend e)))    ; travail avec une copie
@@ -189,3 +204,29 @@ Autrement retourne NIL et NIL"))
 
 (defun make-filtrage-enumerator (enum filter-fun)
   (make-instance 'filtrage-enumerator :depend enum :fun filter-fun))
+  
+
+; ########## MEMOIRE ENUMERATEUR ##############
+
+(defclass memo-enumerator (unaire-combinaison-enumerator)
+  ((memo :accessor memo :initform NIL))
+  (:documentation "énumérateur avec une memoire"))
+  
+(defgeneric unset-memo-object (e)
+	(:documentation "desaffecte le créneau mémoire"))
+	
+(defmethod unset-memo-object ((e memo-enumerator))
+	(with-slots (memo) e
+		(setf memo NIL)))
+
+(defmethod init-enumerator ((e memo-enumerator))
+  (init-enumerator (depend e))
+  (unset-memo-object e))
+
+(defmethod next-element :around ((e memo-enumerator))
+	(if (not (memo e))
+		(setf (memo e) (call-next-method))
+		memo))
+
+(defun make-memo-enumerator (enum)
+	(make-instance 'memo-enumerator :depend e))

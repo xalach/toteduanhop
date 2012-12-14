@@ -4,8 +4,11 @@
 (defmethod init-enumerator ((e filtrage-enumerator))
   (init-enumerator (depend e)))
 
+(defmethod init-enumerator ((e filtrage-enumerator))
+  (init-enumerator (depend e)))
+
 (defmethod copy-enumerator ((e filtrage-enumerator))
-  (make-instance 'filtrage-enumerator :depend (copy-enumerator (depend e))))
+  (make-instance 'filtrage-enumerator :depend (copy-enumerator (depend e)) :fun (fun e)))
 
 (defmethod next-element-p ((e filtrage-enumerator))
   (let ((ce (depend e)))    ; travail avec une copie

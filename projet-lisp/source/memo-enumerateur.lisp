@@ -1,21 +1,22 @@
 (defclass memo-enumerator (unaire-combinaison-enumerator)
-  ((depend-result :accessor depend-result :initform (make-depend-result)))
+  ((memo :accessor memo :initform NIL))
   (:documentation "énumérateur avec une memoire"))
+  
+(defgeneric unset-memo-object (e)
+	(:documentation "desaffecte le créneau mémoire"))
+	
+(defmethod unset-memo-object ((e memo-enumerator))
+	(with-slots (memo) e
+		(setf memo NIL)))
 
-; Il manque les defgeneric pour certain defmethod
+(defmethod init-enumerator ((e memo-enumerator))
+  (init-enumerator (depend e))
+  (unset-memo-object e))
 
-(defmethod make-memo-enumerator ((e abstract-enumerator))
-  (init-enumerator
-   (make-instance ’memo-enumerator :depend (copy-enumerator e))))
+(defmethod next-element :around ((e memo-enumerator))
+	(if (not (memo e))
+		(setf (memo e) (call-next-method))
+		memo))
 
-(defmethod set-memo-result ((e memo-enumerator))
-  (set-depend-result (depend-result e) (depend e)))
-
-(defmethod init-enumerator :after ((e memo-enumerator))
-  (set-memo-result e))
-
-(defmethod trouve-depend ((e memo-enumerator))
-  (trouve-depend (depend-result e)))
-
-(defmethod objet-depend ((e memo-enumerator))
-  (objet-depend (depend-res e)))
+(defun make-memo-enumerator (enum)
+	(make-instance 'memo-enumerator :depend e))

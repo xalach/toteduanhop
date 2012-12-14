@@ -23,5 +23,3 @@ Autrement retourne NIL et NIL"))
       (values (next-element e) T)
       (values NIL NIL)))
 
-(defmethod init-enumerator ((e abstract-enumerator))
-  e) 
