@@ -1,20 +1,6 @@
-; créer une liste circulaire avec ou sans destruction
-(defun ncirc (l) (nconc l l))
-(defun circ (l) (ncirc (copy-list l)))
-
-
 (defclass list-enumerator (abstract-enumerator)
   ((enum-list :initarg :enum-list :initform '())      ; --- la liste en cours d'énumération
    (init-list :initarg :enum-list :initform '())))    ; --- la liste initial
-
-; circp : definir si listre ciclique
-(defun make-list-enumerator (l &optional (circp nil))
-  (when circp
-    (progn
-      (setf l (circ l))
-      (setf *print-cirlcle* t)))     ; rendre l'affiche circulaire
-    (make-instance 'list-enumerator :enum-list l :enum-list l))
-
 
 (defmethod init-enumerator ((e list-enumerator))
   (with-slots (enum-list init-list) e
@@ -33,3 +19,21 @@
     (prog1
      (car enum-list)
      (setf enum-list (cdr enum-list)))))
+
+(defun make-list-enumerator (l)
+  (init-enumerator
+  (make-instance ’list-enumerator :initial-list l)))
+
+; créer une liste circulaire avec ou sans destruction
+(defun ncirc (l) 
+  (setf (cdr (last l)) l))
+
+(defun circ (l) (ncirc (copy-list l)))
+
+; circp : definir si listre ciclique
+(defun make-list-enumerator (l &optional (circp nil))
+  (when circp
+    (progn
+      (setf l (circ l))
+      (setf *print-cirlcle* t)))     ; rendre l'affiche circulaire
+    (make-instance 'list-enumerator :enum-list l :enum-list l))
