@@ -104,13 +104,13 @@ Autrement retourne NIL et NIL"))
   ((mod-fun :initarg :mod-fun
     :reader mod-fun)))
 
-(defmethod init-enumerator :after ((e mod-inductive-enumerator))
+(defmethod init-enumerator :after ((e inductive-modulo-enumerator))
   (setf (current-value e)
     (funcall
     (mod-fun e)
     (current-value e))))
 
-(defmethod next-element :after ((e mod-inductive-enumerator))
+(defmethod next-element :after ((e inductive-modulo-enumerator))
   (setf (current-value e)
     (funcall
     (mod-fun e)
@@ -169,7 +169,7 @@ Autrement retourne NIL et NIL"))
 (defmethod next-element-p ((e unaire-combinaison-enumerator))
   (next-element-p (depend e)))
 
-(defmethod next-element-p ((e unaire-combinaison-enumerator))
+(defmethod next-element ((e unaire-combinaison-enumerator))
   (next-element (depend e)))
 
 ; ##################################################
@@ -200,30 +200,7 @@ Autrement retourne NIL et NIL"))
 (defun make-parallele-enumerator (&rest enums)
   (make-instance 'parallele-enumerator :depends enums))
 
-
-; #####################################################
-; ############ COMBINAISON U-NAIRE ENUMERATOR #########
-
-(defclass unaire-combinaison-enumerator (combinaison-enumerator)
-  ((depend 
-  	:type abstract-enumerator 
-  	:initarg :depend 
-  	:reader depend))
-  (:documentation "énumérateur qui dépend à un seul autre énumérateur"))
-
-(defmethod init-enumerator ((e unaire-combinaison-enumerator))
-  (init-enumerator (depend e)))
-
-(defmethod copy-enumerator ((e unaire-combinaison-enumerator))
-	(make-instance 'unaire-combinaison-enumerator :depend (copy-enumerator (depend e))))
-
-(defmethod next-element-p ((e unaire-combinaison-enumerator))
-  (next-element-p (depend e)))
-
-(defmethod next-element-p ((e unaire-combinaison-enumerator))
-  (next-element (depend e)))
   
-
 ; ##############################################
 ; ########## FILTRAGE ENUMERATEUR ##############
 
@@ -259,23 +236,22 @@ Autrement retourne NIL et NIL"))
   (:documentation "énumérateur avec une memoire"))
   
 (defgeneric unset-memo-object (e)
-	(:documentation "desaffecte le créneau mémoire"))
+  (:documentation "desaffecte le créneau mémoire"))
 	
 (defmethod unset-memo-object ((e memo-enumerator))
-	(with-slots (memo) e
-		(setf memo NIL)))
+  (setf (memo e) NIL)))
 
 (defmethod init-enumerator ((e memo-enumerator))
   (init-enumerator (depend e))
   (unset-memo-object e))
 
 (defmethod next-element :around ((e memo-enumerator))
-	(if (not (memo e))
-		(setf (memo e) (call-next-method))
-		memo))
+  (if (not (memo e))
+      (setf (memo e) (call-next-method))
+      (memo e)))
 
 (defun make-memo-enumerator (enum)
-	(make-instance 'memo-enumerator :depend e))
+  (make-instance 'memo-enumerator :depend enum))
 	
 
 ; ###################################################
@@ -292,7 +268,7 @@ Autrement retourne NIL et NIL"))
 	  until (next-elements e)
 	  while (next-element-p (depend e))
 	  do (setf (next-elements e)
-		   (next-element (depend e))
+		   (next-element (depend e)))))
 
 (defmethod init-enumerator :after ((e conca-enumerator))
 	(skip-to-next-non-null e))
@@ -306,7 +282,7 @@ Autrement retourne NIL et NIL"))
 	(skip-to-next-non-null e)))
 
 (defun make-conca-enumerator (enum)
-  (make-instance 'conca-enumerator :depend (copy-enumerator e)))
+  (make-instance 'conca-enumerator :depend (copy-enumerator enum)))
 
 
 ; #############################################
@@ -318,9 +294,9 @@ Autrement retourne NIL et NIL"))
   (make-empty-enumerator))
 
 (defmethod make-produit-enumerator (fun (depends list))
-  (let ((v (map ’vector #’make-memo-enumerator depends)))
-    (if (every #’trouve-depend v)
-	(make-instance ’produit-enumerateur :sous-enumerators v :fun fun)
+  (let ((v (map 'vector #'make-memo-enumerator depends)))
+    (if (every #'trouve-depend v)
+	(make-instance 'produit-enumerateur :sous-enumerators v :fun fun)
 	(make-empty-enumerator))))
 
 (defmethod depend-i ((e produit-enumerator) (i integer))
