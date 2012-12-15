@@ -120,7 +120,7 @@ Autrement retourne NIL et NIL"))
   (unless current-value
     (setf current-value initial-value))
   (make-instance
-  ’inductive-modulo-enumerator
+  'inductive-modulo-enumerator
   :fun fun
   :mod-fun mod-fun
   :initial-value initial-value
