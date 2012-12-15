@@ -251,7 +251,7 @@ Autrement retourne NIL et NIL"))
       (memo e)))
 
 (defun make-memo-enumerator (enum)
-  (make-instance 'memo-enumerator :depend enum))
+  (make-instance 'memo-enumerator :depend (copy-enumerat enum))
 	
 
 ; ###################################################
