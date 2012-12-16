@@ -6,7 +6,7 @@
   (:documentation "reinitialise et retourne ENUMERATOR"))
 
 (defgeneric copy-enumerator (enumerator)
-  (:documentation "return une copie reinitialisé de ENUMERATOR"))
+  (:documentation "return une copie non reinitialisé de ENUMERATOR"))
 
 (defgeneric next-element-p (enumerator)
   (:documentation "retourne NIL si il n'y a pas de prochain element, sinon retourne un non NIL"))
@@ -34,22 +34,23 @@ Autrement retourne NIL et NIL"))
 
 (defclass list-enumerator (abstract-enumerator)
   ((enum-list :initarg :enum-list :initform '())   
-   (init-list :initarg :enum-list :initform '())))   
+   (init-list :initarg :init-list :initform '())))   
 
 (defun make-list-enumerator (l &optional (circp nil))
   (when circp
     (progn
       (setf l (circ l))
       (setf *print-cirlcle* t))) 
-    (make-instance 'list-enumerator :enum-list l :enum-list l)))
+    (make-instance 'list-enumerator :enum-list l :init-list l)))
 
 (defmethod init-enumerator ((e list-enumerator))
   (with-slots (enum-list init-list) e
-    (setf enum-list init-list)))
+    (setf enum-list init-list))
+  e)
 
 (defmethod copy-enumerator ((e list-enumerator))
-  (with-slots (init-list) e
-    (make-instance 'list-enumerator :enum-list init-list)))
+  (with-slots (init-list enum-list) e
+    (make-instance 'list-enumerator :init-list init-list :enum-list enum-list)))
 
 (defmethod next-element-p ((e list-enumerator))
   (not (endp (slot-value e 'enum-list))))
@@ -84,8 +85,8 @@ Autrement retourne NIL et NIL"))
   e)
 
 (defmethod copy-enumerator ((e inductif-enumerator))
-  (with-slots ((init  init-value)) e
-    (make-instance 'inductif-enumerator :init-value init :current-value init)))
+  (with-slots (init-value current-value fun) e
+    (make-instance 'inductif-enumerator :init-value init-value :current-value current-value :fun fun)))
 
 (defmethod next-element-p ((e inductif-enumerator))
   t)
@@ -108,7 +109,8 @@ Autrement retourne NIL et NIL"))
   (setf (current-value e)
     (funcall
     (mod-fun e)
-    (current-value e))))
+    (current-value e)))
+  e)
 
 (defmethod next-element :after ((e inductive-modulo-enumerator))
   (setf (current-value e)
@@ -130,12 +132,9 @@ Autrement retourne NIL et NIL"))
 ; ####################################################
 ; ############## COMBINAISON ENUMERATEUR #############
 
-(defclass combinaision-enumerator (abstract-enumerator) ()
-  (:documentation "énumérateur qui dépend au moins une autre énumérateur"))
-
 ; 		~~~~~~~~~ Enumerateur N-naire ~~~~~~~~~~~
 
-(defclass nnaire-combinaison-enumerator (combinaison-enumerator)
+(defclass nnaire-combinaison-enumerator (abstract-enumerator)
   ((depends :type list :initarg :depends :reader sous-enumerators))
   (:documentation "énumérateur qui dépend à plusierus autres énumérateurs"))
   
@@ -149,11 +148,12 @@ Autrement retourne NIL et NIL"))
   (every #'next-element-p (sous-enumerators e)))
 
 (defmethod init-enumerator ((e nnaire-combinaison-enumerator))
-  (every #'init-enumerator (sous-enumerators e)))
+  (every #'init-enumerator (sous-enumerators e))
+  e)
 
 ; 		~~~~~~~~~ Enumerateur U-naire ~~~~~~~~~~~ 
   
-(defclass unaire-combinaison-enumerator (combinaison-enumerator)
+(defclass unaire-combinaison-enumerator (abstract-enumerator)
   ((depend 
   	:type abstract-enumerator 
   	:initarg :depend 
@@ -161,7 +161,8 @@ Autrement retourne NIL et NIL"))
   (:documentation "énumérateur qui dépend à un seul autre énumérateur"))
 
 (defmethod init-enumerator ((e unaire-combinaison-enumerator))
-  (init-enumerator (depend e)))
+  (init-enumerator (depend e))
+  e)
 
 (defmethod copy-enumerator ((e unaire-combinaison-enumerator))
 	(make-instance 'unaire-combinaison-enumerator :depend (copy-enumerator (depend e))))
@@ -171,6 +172,7 @@ Autrement retourne NIL et NIL"))
 
 (defmethod next-element ((e unaire-combinaison-enumerator))
   (next-element (depend e)))
+
 
 ; ##################################################
 ; ############ ENUMERATEUR PARALLELE ###############
@@ -186,16 +188,20 @@ Autrement retourne NIL et NIL"))
       collect (setf nl (cons (copy-enumerator enumerator) nl)))
     (make-instance 'parallele-enumerator :depends nl)))
 
-(defmethod call-enumerator ((e abstract-enumerator))
+(defmethod call-enumerator ((e parallele-enumerator))
   (let ((l '()))  ; liste des resultats
     (loop
       for enumerator
 	in (sous-enumerators e) collect 
-	  (multiple-value-bind (v r) (next-element enumerator)
+	  (multiple-value-bind (v r) (call-enumerator enumerator)
 	    (if (not r)
-		(return (values NIL NIL))
+		(progn
+		  (setf l NIL)
+		  (return))
 		(setf l (cons v l)))))
-    (values l T)))
+    (if (not l)
+	(values NIL NIL)
+	(values l T))))
 
 (defun make-parallele-enumerator (&rest enums)
   (make-instance 'parallele-enumerator :depends enums))
@@ -211,18 +217,27 @@ Autrement retourne NIL et NIL"))
   (make-instance 'filtrage-enumerator :depend (copy-enumerator (depend e)) :fun (fun e)))
 
 (defmethod next-element-p ((e filtrage-enumerator))
-  (let ((ce (depend e)))    ; travail avec une copie
+  (let ((ce (copy-enumerator (depend e))) (find NIL))    ; travail avec une copie non initializé
     (do ((fin T)) ((not fin))
-      (multiple-value-bind (v trv) (call-enumerator ce)
-	(setf fin trv)
-	(if (funcall (fun e) v)
-	    (return T)))))
-  NIL)
+      (multiple-value-bind (v r) (call-enumerator ce)
+	(setf fin r)
+	(when (funcall (fun e) v)
+	  (progn
+	    (setf find T)
+	    (return)))))
+    (or find NIL)))
 
 (defmethod next-element ((e filtrage-enumerator))
-  (do ((fin T) (v)) ((not fin))
-    (if (funcall (fun e) (setf v (next-element (depend e))))
-	(return v))))
+  (let ((v NIL))
+    (do ((fin T)) ((not fin))
+      (setf v (next-element (depend e)))
+      (if (funcall (fun e) v)
+	  (return v)))))
+
+(defmethod call-enumerator ((e filtrage-enumerator))
+  (if (next-element-p e)
+      (values (next-element e) T)
+      (values NIL NIL)))
 
 (defun make-filtrage-enumerator (enum filter-fun)
   (make-instance 'filtrage-enumerator :depend enum :fun filter-fun))
@@ -243,7 +258,13 @@ Autrement retourne NIL et NIL"))
 
 (defmethod init-enumerator ((e memo-enumerator))
   (init-enumerator (depend e))
-  (unset-memo-object e))
+  (unset-memo-object e)
+  e)
+
+(defmethod next-element-p :around ((e memo-enumerator))
+  (if (not (memo e))
+      (call-next-method)
+      T))
 
 (defmethod next-element :around ((e memo-enumerator))
   (if (not (memo e))
@@ -251,8 +272,9 @@ Autrement retourne NIL et NIL"))
       (memo e)))
 
 (defun make-memo-enumerator (enum)
-  (make-instance 'memo-enumerator :depend (copy-enumerat enum))
-	
+  (make-instance 'memo-enumerator :depend (copy-enumerator enum)))
+
+
 
 ; ###################################################
 ; ########## CONCATENATION ENUMERATEUR ##############
